@@ -520,164 +520,112 @@ body { font-family: 'Nunito', sans-serif; background: var(--off-white); }
   </div>
 </div>
 
-<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-firestore.js"></script>
-<script src="js/firebase-config.js"></script>
+<script src="js/admin-api.js"></script>
 
 <script>
-// Check admin session
 document.addEventListener('DOMContentLoaded', async () => {
-  const adminSession = localStorage.getItem('adminSession');
-  if (!adminSession) {
-    window.location = 'admin-login.html';
-    return;
+  if (!AdminAPI.requireAuth()) return;
+  const admin = AdminAPI.getAdmin();
+  if (admin && document.getElementById('adminEmail')) {
+    document.getElementById('adminEmail').textContent = admin.email;
   }
 
-  const session = JSON.parse(adminSession);
-  document.getElementById('adminEmail').textContent = session.email;
-
-  // Update time
   setInterval(() => {
-    const now = new Date();
-    document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+    const el = document.getElementById('currentTime');
+    if (el) el.textContent = new Date().toLocaleTimeString();
   }, 1000);
 
-  // Load dashboard data
   await loadDashboardData();
 });
 
-// Show page
 function showPage(pageName) {
   document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
   document.getElementById(pageName).classList.add('active');
-
   document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-  event.target.closest('.menu-item').classList.add('active');
-
+  if (window.event && window.event.target.closest('.menu-item')) {
+    window.event.target.closest('.menu-item').classList.add('active');
+  }
   if (pageName === 'users') loadUsers();
   if (pageName === 'orders') loadAllOrders();
 }
 
-// Load dashboard
+function fmtDate(v) {
+  if (!v) return '--';
+  try { return new Date(v).toLocaleDateString(); } catch { return '--'; }
+}
+
 async function loadDashboardData() {
   try {
-    // Get users
-    const usersSnap = await db.collection('users').get();
-    const users = usersSnap.docs.map(d => d.data());
-    document.getElementById('totalUsers').textContent = users.length;
+    const stats = await AdminAPI.stats();
+    document.getElementById('totalUsers').textContent = stats.users;
+    document.getElementById('totalOrders').textContent = stats.orders;
+    document.getElementById('totalRevenue').textContent = '₹' + Number(stats.revenue || 0).toFixed(0);
+    const avg = stats.orders > 0 ? (stats.revenue / stats.orders) : 0;
+    document.getElementById('avgOrderValue').textContent = '₹' + avg.toFixed(0);
 
-    // Get orders
-    const ordersSnap = await db.collection('orders').get();
-    const orders = ordersSnap.docs.map(d => d.data());
-    document.getElementById('totalOrders').textContent = orders.length;
-
-    // Calculate revenue
-    const revenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
-    document.getElementById('totalRevenue').textContent = '₹' + revenue.toFixed(0);
-
-    // Avg order value
-    const avgOrder = orders.length > 0 ? (revenue / orders.length) : 0;
-    document.getElementById('avgOrderValue').textContent = '₹' + avgOrder.toFixed(0);
-
-    // Recent orders
-    const recentOrders = orders.slice(-5).reverse();
-    const recentHTML = recentOrders.map(order => `
+    const rows = (stats.recentOrders || []).map(o => `
       <tr>
-        <td style="font-weight: 700;">${order.orderId}</td>
-        <td>${order.user || 'Unknown'}</td>
-        <td>₹${(order.total || 0).toFixed(2)}</td>
-        <td><span class="status-badge status-${order.status}">${order.status}</span></td>
-        <td>${order.orderDate ? new Date(order.orderDate.toDate()).toLocaleDateString() : '--'}</td>
-        <td><button class="view-btn" onclick="viewOrder('${order.orderId}')">View</button></td>
-      </tr>
-    `).join('');
-    
-    document.getElementById('recentOrdersTable').innerHTML = recentHTML || '<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-light);">No orders found</td></tr>';
-
-  } catch (error) {
-    console.error('Error loading dashboard:', error);
+        <td style="font-weight: 700;">${o.orderId || o._id}</td>
+        <td>${o.user || o.userEmail || 'Unknown'}</td>
+        <td>₹${Number(o.total || 0).toFixed(2)}</td>
+        <td><span class="status-badge status-${o.status || 'pending'}">${o.status || 'pending'}</span></td>
+        <td>${fmtDate(o.createdAt || o.orderDate)}</td>
+        <td><button class="view-btn" onclick="viewOrder('${o.orderId || o._id}')">View</button></td>
+      </tr>`).join('');
+    document.getElementById('recentOrdersTable').innerHTML =
+      rows || '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light);">No orders found</td></tr>';
+  } catch (err) {
+    console.error('Dashboard error:', err);
   }
 }
 
-// Load users
 async function loadUsers() {
   try {
-    const usersSnap = await db.collection('users').get();
-    const users = usersSnap.docs.map(d => d.data());
-
-    const usersHTML = users.map(user => `
+    const { items } = await AdminAPI.users.list();
+    const html = items.map(u => `
       <tr>
-        <td>${user.email}</td>
-        <td>${user.displayName || 'N/A'}</td>
-        <td>${user.phone || 'N/A'}</td>
-        <td>${user.createdAt ? new Date(user.createdAt.toDate()).toLocaleDateString() : '--'}</td>
-        <td>${(user.orders || []).length}</td>
+        <td>${u.email || ''}</td>
+        <td>${u.displayName || u.name || 'N/A'}</td>
+        <td>${u.phone || 'N/A'}</td>
+        <td>${fmtDate(u.createdAt)}</td>
+        <td>${(u.orders || []).length}</td>
         <td>₹0</td>
-        <td><span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Active</span></td>
-      </tr>
-    `).join('');
-
-    document.getElementById('usersTable').innerHTML = usersHTML || '<tr><td colspan="7" style="text-align: center; padding: 20px;">No users found</td></tr>';
-
-  } catch (error) {
-    console.error('Error loading users:', error);
+        <td><span style="background:#dcfce7;color:#166534;padding:4px 8px;border-radius:4px;font-size:11px;">Active</span></td>
+      </tr>`).join('');
+    document.getElementById('usersTable').innerHTML =
+      html || '<tr><td colspan="7" style="text-align:center;padding:20px;">No users found</td></tr>';
+  } catch (err) {
+    console.error('Users error:', err);
   }
 }
 
-// Load all orders
 async function loadAllOrders() {
   try {
-    const ordersSnap = await db.collection('orders').get();
-    const orders = ordersSnap.docs.map(d => d.data());
-
-    const ordersHTML = orders.map(order => `
+    const { items } = await AdminAPI.orders.list();
+    const html = items.map(o => `
       <tr>
-        <td style="font-weight: 700;">${order.orderId}</td>
-        <td>${order.user || 'Unknown'}</td>
-        <td>${(order.items || []).length} items</td>
-        <td>₹${(order.total || 0).toFixed(2)}</td>
-        <td><span class="status-badge status-${order.status}">${order.status}</span></td>
-        <td>${order.orderDate ? new Date(order.orderDate.toDate()).toLocaleDateString() : '--'}</td>
-        <td><button class="view-btn" onclick="viewOrder('${order.orderId}')">View</button></td>
-      </tr>
-    `).join('');
-
-    document.getElementById('allOrdersTable').innerHTML = ordersHTML || '<tr><td colspan="7" style="text-align: center; padding: 20px;">No orders found</td></tr>';
-
-  } catch (error) {
-    console.error('Error loading orders:', error);
+        <td style="font-weight: 700;">${o.orderId || o._id}</td>
+        <td>${o.user || o.userEmail || 'Unknown'}</td>
+        <td>${(o.items || []).length} items</td>
+        <td>₹${Number(o.total || 0).toFixed(2)}</td>
+        <td><span class="status-badge status-${o.status || 'pending'}">${o.status || 'pending'}</span></td>
+        <td>${fmtDate(o.createdAt || o.orderDate)}</td>
+        <td><button class="view-btn" onclick="viewOrder('${o.orderId || o._id}')">View</button></td>
+      </tr>`).join('');
+    document.getElementById('allOrdersTable').innerHTML =
+      html || '<tr><td colspan="7" style="text-align:center;padding:20px;">No orders found</td></tr>';
+  } catch (err) {
+    console.error('Orders error:', err);
   }
 }
 
-// View order details
 function viewOrder(orderId) {
   alert('Order Details: ' + orderId + '\n(Coming soon - full order details page)');
 }
 
-// Logout
-async function logoutAdmin() {
-  const confirm = window.confirm('Are you sure you want to logout?');
-  if (!confirm) return;
-
-  try {
-    const adminSession = JSON.parse(localStorage.getItem('adminSession'));
-    
-    // Log logout
-    await db.collection('adminLogs').add({
-      adminId: adminSession.uid,
-      email: adminSession.email,
-      action: 'LOGOUT',
-      timestamp: new Date()
-    });
-
-    localStorage.removeItem('adminSession');
-    window.location = 'admin-login.html';
-  } catch (error) {
-    console.error('Logout error:', error);
-    localStorage.removeItem('adminSession');
-    window.location = 'admin-login.html';
-  }
+function logoutAdmin() {
+  if (!window.confirm('Are you sure you want to logout?')) return;
+  AdminAPI.logout();
 }
 </script>
 

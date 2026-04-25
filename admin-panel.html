@@ -39,6 +39,7 @@
   .nav-icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .badge-pill{margin-left:auto;background:var(--danger);color:#fff;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:600}
   .sidebar-footer{padding:16px 20px;border-top:1px solid var(--border)}
+  #logoutBtn:hover{background:rgba(226,75,74,0.08);border-color:var(--danger);color:var(--danger)}
   .user-row{display:flex;align-items:center;gap:10px}
   .user-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0}
   .user-name{font-size:13px;font-weight:500;color:var(--text)}
@@ -224,13 +225,17 @@
   </nav>
   <div class="sidebar-footer">
     <div class="user-row">
-      <div class="user-av">A</div>
-      <div>
-        <div class="user-name">Admin</div>
-        <div class="user-role">Super Admin</div>
+      <div class="user-av" id="adminAvatar">A</div>
+      <div style="min-width:0;flex:1">
+        <div class="user-name" id="adminEmail">Admin</div>
+        <div class="user-role" id="adminRole">Super Admin</div>
       </div>
       <div class="online-dot"></div>
     </div>
+    <button id="logoutBtn" onclick="handleLogout()" style="margin-top:12px;width:100%;padding:8px 12px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.15s">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3M11 11l3-3-3-3M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Logout
+    </button>
   </div>
 </div>
 
@@ -667,7 +672,39 @@
   </div>
 </div>
 
+<script src="js/admin-api.js"></script>
 <script>
+if (!AdminAPI.requireAuth()) { /* redirected */ }
+
+// Verify token is still valid on every load — kicks expired sessions out.
+(async () => {
+  try {
+    const me = await fetch('/api/admin/me', {
+      headers: { Authorization: 'Bearer ' + AdminAPI.getToken() }
+    });
+    if (!me.ok) {
+      AdminAPI.logout();
+      return;
+    }
+    const data = await me.json();
+    document.addEventListener('DOMContentLoaded', () => {
+      const emailEl = document.getElementById('adminEmail');
+      const roleEl = document.getElementById('adminRole');
+      const avEl = document.getElementById('adminAvatar');
+      if (emailEl) emailEl.textContent = data.email;
+      if (roleEl) roleEl.textContent = (data.role || 'admin').replace(/^./, c => c.toUpperCase());
+      if (avEl) avEl.textContent = (data.email || 'A')[0].toUpperCase();
+    });
+  } catch {
+    AdminAPI.logout();
+  }
+})();
+
+function handleLogout() {
+  if (!window.confirm('Logout from admin panel?')) return;
+  AdminAPI.logout();
+}
+
 const titles = {dashboard:'Dashboard',users:'Users',orders:'Orders',pages:'Pages',messages:'Messages',settings:'Settings'};
 function show(id,el){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -825,6 +862,33 @@ const colors=['#7c6ef5','#5dcaa5','#7c6ef5','#f0997b','#7c6ef5','#5dcaa5','#f4c0
 const max=Math.max(...vals);
 const bc=document.getElementById('barChart');
 if(bc){vals.forEach((v,i)=>{const b=document.createElement('div');b.className='bar';b.style.cssText=`height:${Math.round(v/max*100)}%;background:${colors[i]};opacity:0.85`;b.title=v+' visits';bc.appendChild(b);})}
+
+// Load real users from Mongo into #userTbl
+async function loadRealUsers(){
+  try {
+    const { items } = await AdminAPI.users.list();
+    const tbl = document.getElementById('userTbl');
+    if (!tbl || !items.length) return;
+    tbl.innerHTML = items.map(u => {
+      const name = u.displayName || u.name || u.email || 'User';
+      const initials = name.split(' ').map(s=>s[0]).join('').slice(0,2).toUpperCase();
+      const created = u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '--';
+      const orders = (u.orders || []).length;
+      return `<tr data-s="Active">
+        <td><span class="av" style="background:rgba(124,110,245,0.2);color:var(--accent)">${initials}</span>${name}</td>
+        <td style="color:var(--muted)">${u.email || ''}</td>
+        <td><span class="pill p-purple">User</span></td>
+        <td><span class="pill p-green">Active</span></td>
+        <td style="color:var(--muted)">${created}</td>
+        <td>${orders}</td>
+        <td><button class="btn" style="padding:5px 12px;font-size:12px">View</button></td>
+      </tr>`;
+    }).join('');
+  } catch (err) {
+    console.warn('loadRealUsers failed:', err.message);
+  }
+}
+document.addEventListener('DOMContentLoaded', loadRealUsers);
 </script>
 </body>
 </html>

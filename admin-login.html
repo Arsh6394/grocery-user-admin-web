@@ -235,105 +235,44 @@ input[type="password"]:focus {
   </div>
 </div>
 
-<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-firestore.js"></script>
-<script src="js/firebase-config.js"></script>
+<script src="js/admin-api.js"></script>
 
 <script>
-// Hardcoded admin credentials (in production, use proper admin system)
-const ADMIN_EMAILS = [
-  'admin@freshmart.com',
-  'aafridi@freshmart.com',
-  'owner@freshmart.com'
-];
-
-// Check if already logged in
 document.addEventListener('DOMContentLoaded', () => {
-  const adminSession = localStorage.getItem('adminSession');
-  if (adminSession) {
-    window.location = 'admin-dashboard.html';
+  if (AdminAPI.getToken()) {
+    window.location = 'admin-panel.html';
   }
 });
 
-// Handle admin login
 async function handleAdminLogin(event) {
   event.preventDefault();
 
   const email = document.getElementById('adminEmail').value.trim();
   const password = document.getElementById('adminPassword').value;
+  const errorEl = document.getElementById('generalError');
+  errorEl.classList.remove('show');
+  errorEl.textContent = '';
 
-  // Clear errors
-  document.getElementById('emailError').textContent = '';
-  document.getElementById('passwordError').textContent = '';
-  document.getElementById('generalError').textContent = '';
-
-  // Validate
   if (!email) {
+    document.getElementById('emailError').classList.add('show');
     document.getElementById('emailError').textContent = 'Email is required';
     return;
   }
-
-  if (!ADMIN_EMAILS.includes(email)) {
-    document.getElementById('emailError').classList.add('show');
-    document.getElementById('emailError').textContent = 'Not authorized as admin';
-    return;
-  }
-
   if (!password) {
+    document.getElementById('passwordError').classList.add('show');
     document.getElementById('passwordError').textContent = 'Password is required';
     return;
   }
 
-  // Show loading
   document.getElementById('loadingSpinner').style.display = 'block';
 
   try {
-    // Sign in with Firebase
-    const result = await auth.signInWithEmailAndPassword(email, password);
-    
-    // Verify admin status in Firestore
-    const adminDoc = await db.collection('admins').doc(result.user.uid).get();
-    
-    if (!adminDoc.exists) {
-      throw new Error('User is not an authorized admin');
-    }
-
-    // Create admin session
-    localStorage.setItem('adminSession', JSON.stringify({
-      uid: result.user.uid,
-      email: result.user.email,
-      loginTime: new Date().toISOString()
-    }));
-
-    // Log admin login
-    await db.collection('adminLogs').add({
-      adminId: result.user.uid,
-      email: email,
-      action: 'LOGIN',
-      timestamp: new Date(),
-      ipAddress: 'Browser session'
-    });
-
-    // Redirect to dashboard
-    setTimeout(() => {
-      window.location = 'admin-dashboard.html';
-    }, 500);
-
-  } catch (error) {
+    await AdminAPI.login(email, password);
+    setTimeout(() => { window.location = 'admin-panel.html'; }, 300);
+  } catch (err) {
     document.getElementById('loadingSpinner').style.display = 'none';
-    const errorEl = document.getElementById('generalError');
     errorEl.classList.add('show');
-    
-    if (error.message.includes('auth/user-not-found')) {
-      errorEl.textContent = '❌ Admin account not found';
-    } else if (error.message.includes('auth/wrong-password')) {
-      errorEl.textContent = '❌ Incorrect password';
-    } else if (error.message.includes('not an authorized admin')) {
-      errorEl.textContent = '❌ User is not authorized as admin';
-    } else {
-      errorEl.textContent = '❌ ' + error.message;
-    }
+    errorEl.textContent = '❌ ' + (err.message || 'Login failed');
   }
 }
 </script>
