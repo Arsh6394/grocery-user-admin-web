@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - FreshMart</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2d8c4e;
+  --green-dark: #1e6338;
+  --green-light: #e8f5ec;
+  --orange: #f97316;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --text: #1a1a1a;
+  --text-mid: #4a5568;
+  --text-light: #9ca3af;
+  --border: #e8f0e4;
+  --white: #ffffff;
+  --off-white: #fafaf7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; background: var(--off-white); }
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.admin-sidebar {
+  background: var(--green);
+  color: white;
+  padding: 24px;
+  position: fixed;
+  width: 280px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.admin-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-item {
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.menu-item.active {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  border-left: 4px solid white;
+  padding-left: 12px;
+}
+
+.menu-icon {
+  font-size: 18px;
+}
+
+.logout-btn {
+  margin-top: auto;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+/* MAIN CONTENT */
+.admin-main {
+  margin-left: 280px;
+  padding: 24px;
+}
+
+.admin-header {
+  background: var(--white);
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-mid);
+  font-size: 13px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--white);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stat-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+
+.stat-change {
+  font-size: 12px;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.stat-change.negative {
+  color: var(--red);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  background: var(--white);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chart-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.recent-orders {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.orders-header {
+  padding: 20px 24px;
+  border-bottom: 2px solid var(--border);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th {
+  background: var(--off-white);
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.orders-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.orders-table tbody tr:hover {
+  background: var(--off-white);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.status-confirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-processing {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-shipped {
+  background: #dbeafe;
+  color: #0c4a6e;
+}
+
+.status-delivered {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.page-content {
+  display: none;
+}
+
+.page-content.active {
+  display: block;
+}
+
+.view-btn {
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.view-btn:hover {
+  background: var(--green-dark);
+}
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .admin-main {
+    margin-left: 0;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <div class="admin-sidebar">
+    <div class="admin-logo">👨‍💼 FreshMart</div>
+    
+    <div class="admin-menu">
+      <button class="menu-item active" onclick="showPage('dashboard')">
+        <span class="menu-icon">📊</span> Dashboard
+      </button>
+      <button class="menu-item" onclick="showPage('users')">
+        <span class="menu-icon">👥</span> Users
+      </button>
+      <button class="menu-item" onclick="showPage('orders')">
+        <span class="menu-icon">📦</span> Orders
+      </button>
+      <button class="menu-item" onclick="showPage('analytics')">
+        <span class="menu-icon">📈</span> Analytics
+      </button>
+    </div>
+
+    <button class="logout-btn" onclick="logoutAdmin()">🚪 Logout</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="admin-main">
+    <!-- HEADER -->
+    <div class="admin-header">
+      <div>
+        <h1 class="header-title">Admin Dashboard</h1>
+      </div>
+      <div class="header-info">
+        <span>👤 <span id="adminEmail">Admin</span></span>
+        <span>🕐 <span id="currentTime">--:--</span></span>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboard" class="page-content active">
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-label">Total Users</div>
+          <div class="stat-value" id="totalUsers">0</div>
+          <div class="stat-change">+12% from last week</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value" id="totalOrders">0</div>
+          <div class="stat-change">+8% from last week</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Revenue</div>
+          <div class="stat-value" id="totalRevenue">₹0</div>
+          <div class="stat-change">+15% from last week</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-label">Avg Order Value</div>
+          <div class="stat-value" id="avgOrderValue">₹0</div>
+          <div class="stat-change">↔ No change</div>
+        </div>
+      </div>
+
+      <!-- RECENT ORDERS -->
+      <div class="recent-orders">
+        <div class="orders-header">📦 Recent Orders</div>
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="recentOrdersTable">
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 24px; color: var(--text-light);">Loading orders...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- USERS PAGE -->
+    <div id="users" class="page-content">
+      <div style="background: var(--white); padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+        <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 800;">User Management</h2>
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Joined</th>
+              <th>Orders</th>
+              <th>Total Spent</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="usersTable">
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 24px; color: var(--text-light);">Loading users...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ORDERS PAGE -->
+    <div id="orders" class="page-content">
+      <div style="background: var(--white); padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+        <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 800;">Order Management</h2>
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer Email</th>
+              <th>Items</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="allOrdersTable">
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 24px; color: var(--text-light);">Loading orders...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ANALYTICS PAGE -->
+    <div id="analytics" class="page-content">
+      <div style="background: var(--white); padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+        <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 800;">📊 Analytics & Reports</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+          <div style="padding: 20px; background: var(--green-light); border-radius: 8px;">
+            <h3 style="color: var(--green); margin-bottom: 10px;">User Growth</h3>
+            <div style="font-size: 24px; font-weight: 900; color: var(--green); margin-bottom: 5px;" id="userGrowth">+45%</div>
+            <p style="font-size: 12px; color: var(--text-mid);">This month vs last month</p>
+          </div>
+
+          <div style="padding: 20px; background: #fef3c7; border-radius: 8px;">
+            <h3 style="color: #92400e; margin-bottom: 10px;">Order Completion</h3>
+            <div style="font-size: 24px; font-weight: 900; color: #92400e; margin-bottom: 5px;" id="orderCompletion">94%</div>
+            <p style="font-size: 12px; color: var(--text-mid);">Successfully completed orders</p>
+          </div>
+
+          <div style="padding: 20px; background: #dbeafe; border-radius: 8px;">
+            <h3 style="color: #0c4a6e; margin-bottom: 10px;">Avg Customer Value</h3>
+            <div style="font-size: 24px; font-weight: 900; color: #0c4a6e; margin-bottom: 5px;" id="customerValue">₹2,450</div>
+            <p style="font-size: 12px; color: var(--text-mid);">Lifetime value per user</p>
+          </div>
+
+          <div style="padding: 20px; background: #d1fae5; border-radius: 8px;">
+            <h3 style="color: #065f46; margin-bottom: 10px;">Top Category</h3>
+            <div style="font-size: 20px; font-weight: 900; color: #065f46; margin-bottom: 5px;">Vegetables</div>
+            <p style="font-size: 12px; color: var(--text-mid);">Most ordered category</p>
+          </div>
+        </div>
+
+        <div style="padding: 20px; background: var(--off-white); border-radius: 8px; border-left: 4px solid var(--green);">
+          <h3 style="color: var(--text); margin-bottom: 10px;">📈 Insights</h3>
+          <ul style="list-style: none; color: var(--text-mid); font-size: 13px; line-height: 1.8;">
+            <li>✓ Revenue increased by 15% this week</li>
+            <li>✓ 94% of orders delivered on time</li>
+            <li>✓ Average order value is ₹750</li>
+            <li>✓ Top 10% customers account for 45% of revenue</li>
+            <li>✓ Peak ordering time: 6-8 PM daily</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-firestore.js"></script>
+<script src="js/firebase-config.js"></script>
+
+<script>
+// Check admin session
+document.addEventListener('DOMContentLoaded', async () => {
+  const adminSession = localStorage.getItem('adminSession');
+  if (!adminSession) {
+    window.location = 'admin-login.html';
+    return;
+  }
+
+  const session = JSON.parse(adminSession);
+  document.getElementById('adminEmail').textContent = session.email;
+
+  // Update time
+  setInterval(() => {
+    const now = new Date();
+    document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+  }, 1000);
+
+  // Load dashboard data
+  await loadDashboardData();
+});
+
+// Show page
+function showPage(pageName) {
+  document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageName).classList.add('active');
+
+  document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+  event.target.closest('.menu-item').classList.add('active');
+
+  if (pageName === 'users') loadUsers();
+  if (pageName === 'orders') loadAllOrders();
+}
+
+// Load dashboard
+async function loadDashboardData() {
+  try {
+    // Get users
+    const usersSnap = await db.collection('users').get();
+    const users = usersSnap.docs.map(d => d.data());
+    document.getElementById('totalUsers').textContent = users.length;
+
+    // Get orders
+    const ordersSnap = await db.collection('orders').get();
+    const orders = ordersSnap.docs.map(d => d.data());
+    document.getElementById('totalOrders').textContent = orders.length;
+
+    // Calculate revenue
+    const revenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+    document.getElementById('totalRevenue').textContent = '₹' + revenue.toFixed(0);
+
+    // Avg order value
+    const avgOrder = orders.length > 0 ? (revenue / orders.length) : 0;
+    document.getElementById('avgOrderValue').textContent = '₹' + avgOrder.toFixed(0);
+
+    // Recent orders
+    const recentOrders = orders.slice(-5).reverse();
+    const recentHTML = recentOrders.map(order => `
+      <tr>
+        <td style="font-weight: 700;">${order.orderId}</td>
+        <td>${order.user || 'Unknown'}</td>
+        <td>₹${(order.total || 0).toFixed(2)}</td>
+        <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+        <td>${order.orderDate ? new Date(order.orderDate.toDate()).toLocaleDateString() : '--'}</td>
+        <td><button class="view-btn" onclick="viewOrder('${order.orderId}')">View</button></td>
+      </tr>
+    `).join('');
+    
+    document.getElementById('recentOrdersTable').innerHTML = recentHTML || '<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-light);">No orders found</td></tr>';
+
+  } catch (error) {
+    console.error('Error loading dashboard:', error);
+  }
+}
+
+// Load users
+async function loadUsers() {
+  try {
+    const usersSnap = await db.collection('users').get();
+    const users = usersSnap.docs.map(d => d.data());
+
+    const usersHTML = users.map(user => `
+      <tr>
+        <td>${user.email}</td>
+        <td>${user.displayName || 'N/A'}</td>
+        <td>${user.phone || 'N/A'}</td>
+        <td>${user.createdAt ? new Date(user.createdAt.toDate()).toLocaleDateString() : '--'}</td>
+        <td>${(user.orders || []).length}</td>
+        <td>₹0</td>
+        <td><span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Active</span></td>
+      </tr>
+    `).join('');
+
+    document.getElementById('usersTable').innerHTML = usersHTML || '<tr><td colspan="7" style="text-align: center; padding: 20px;">No users found</td></tr>';
+
+  } catch (error) {
+    console.error('Error loading users:', error);
+  }
+}
+
+// Load all orders
+async function loadAllOrders() {
+  try {
+    const ordersSnap = await db.collection('orders').get();
+    const orders = ordersSnap.docs.map(d => d.data());
+
+    const ordersHTML = orders.map(order => `
+      <tr>
+        <td style="font-weight: 700;">${order.orderId}</td>
+        <td>${order.user || 'Unknown'}</td>
+        <td>${(order.items || []).length} items</td>
+        <td>₹${(order.total || 0).toFixed(2)}</td>
+        <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+        <td>${order.orderDate ? new Date(order.orderDate.toDate()).toLocaleDateString() : '--'}</td>
+        <td><button class="view-btn" onclick="viewOrder('${order.orderId}')">View</button></td>
+      </tr>
+    `).join('');
+
+    document.getElementById('allOrdersTable').innerHTML = ordersHTML || '<tr><td colspan="7" style="text-align: center; padding: 20px;">No orders found</td></tr>';
+
+  } catch (error) {
+    console.error('Error loading orders:', error);
+  }
+}
+
+// View order details
+function viewOrder(orderId) {
+  alert('Order Details: ' + orderId + '\n(Coming soon - full order details page)');
+}
+
+// Logout
+async function logoutAdmin() {
+  const confirm = window.confirm('Are you sure you want to logout?');
+  if (!confirm) return;
+
+  try {
+    const adminSession = JSON.parse(localStorage.getItem('adminSession'));
+    
+    // Log logout
+    await db.collection('adminLogs').add({
+      adminId: adminSession.uid,
+      email: adminSession.email,
+      action: 'LOGOUT',
+      timestamp: new Date()
+    });
+
+    localStorage.removeItem('adminSession');
+    window.location = 'admin-login.html';
+  } catch (error) {
+    console.error('Logout error:', error);
+    localStorage.removeItem('adminSession');
+    window.location = 'admin-login.html';
+  }
+}
+</script>
+
+</body>
+</html>

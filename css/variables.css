@@ -1,0 +1,41 @@
+/* ===== COLOR VARIABLES ===== */
+:root {
+  --green: #2d8c4e;
+  --green-dark: #1e6338;
+  --green-light: #e8f5ec;
+  --green-mid: #4caf70;
+  --orange: #f97316;
+  --orange-light: #fff4ed;
+  --yellow: #fbbf24;
+  --red: #ef4444;
+  --white: #ffffff;
+  --off-white: #fafaf7;
+  --text: #1a1a1a;
+  --text-mid: #4a5568;
+  --text-light: #9ca3af;
+  --border: #e8f0e4;
+  --card-shadow: 0 4px 24px rgba(45,140,78,0.10);
+
+  /* Typography */
+  --font-primary: 'Nunito', sans-serif;
+  --font-serif: 'Fraunces', serif;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 60px;
+
+  /* Border Radius */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-full: 50px;
+
+  /* Transitions */
+  --transition-fast: 0.2s;
+  --transition-normal: 0.3s;
+  --transition-slow: 0.5s;
+}

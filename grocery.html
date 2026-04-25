@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreshMart — India's Freshest Grocery Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2d8c4e;
+  --green-dark: #1e6338;
+  --green-light: #e8f5ec;
+  --green-mid: #4caf70;
+  --orange: #f97316;
+  --orange-light: #fff4ed;
+  --yellow: #fbbf24;
+  --red: #ef4444;
+  --white: #ffffff;
+  --off-white: #fafaf7;
+  --text: #1a1a1a;
+  --text-mid: #4a5568;
+  --text-light: #9ca3af;
+  --border: #e8f0e4;
+  --card-shadow: 0 4px 24px rgba(45,140,78,0.10);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--off-white);color:var(--text);overflow-x:hidden;}
+
+/* ===== LOADER ===== */
+#loader{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.5s;}
+.loader-icon{font-size:56px;animation:bounce 0.8s ease infinite alternate;}
+.loader-text{font-family:'Fraunces',serif;font-size:28px;color:var(--green);margin-top:12px;font-weight:900;}
+@keyframes bounce{from{transform:translateY(0);}to{transform:translateY(-16px);}}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--green);color:#fff;padding:14px 22px;border-radius:12px;font-size:14px;font-weight:700;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 30px rgba(45,140,78,0.35);}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ===== TOPBAR ===== */
+.topbar{background:var(--green);color:#fff;padding:7px 60px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:600;letter-spacing:0.3px;}
+.topbar-links{display:flex;gap:24px;}
+.topbar-links a{color:rgba(255,255,255,0.85);text-decoration:none;cursor:pointer;transition:color 0.2s;}
+.topbar-links a:hover{color:#fff;}
+
+/* ===== NAVBAR ===== */
+nav{background:#fff;padding:0 60px;display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,0.07);height:70px;}
+.logo{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--green);cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+.logo-leaf{font-size:24px;}
+.search-bar{flex:1;display:flex;background:var(--green-light);border-radius:50px;overflow:hidden;border:2px solid transparent;transition:border-color 0.3s;max-width:560px;}
+.search-bar:focus-within{border-color:var(--green);}
+.search-select{background:var(--green);color:#fff;border:none;padding:0 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;border-radius:50px 0 0 50px;}
+.search-input{flex:1;background:transparent;border:none;outline:none;padding:10px 16px;font-size:14px;font-family:'Nunito',sans-serif;color:var(--text);}
+.search-btn{background:var(--green);color:#fff;border:none;padding:0 22px;cursor:pointer;font-size:18px;transition:background 0.2s;}
+.search-btn:hover{background:var(--green-dark);}
+.nav-actions{display:flex;align-items:center;gap:16px;margin-left:auto;}
+.nav-icon-btn{background:none;border:1px solid var(--border);width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:all 0.2s;position:relative;}
+.nav-icon-btn:hover{background:var(--green-light);border-color:var(--green);}
+.badge{position:absolute;top:-4px;right:-4px;background:var(--orange);color:#fff;width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.nav-cart-btn{background:var(--green);color:#fff;border:none;padding:10px 20px;border-radius:50px;cursor:pointer;font-size:13px;font-weight:800;display:flex;align-items:center;gap:8px;transition:all 0.2s;white-space:nowrap;}
+.nav-cart-btn:hover{background:var(--green-dark);transform:scale(1.03);}
+
+/* ===== PAGES ===== */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* ===== HOME ===== */
+/* HERO */
+.hero{background:linear-gradient(135deg,#e8f5ec 0%,#f0faf3 50%,#fff9f0 100%);padding:0 60px;display:grid;grid-template-columns:1fr 1fr;align-items:center;min-height:500px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(45,140,78,0.08),transparent 70%);border-radius:50%;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--orange-light);color:var(--orange);font-size:12px;font-weight:800;letter-spacing:0.5px;padding:6px 14px;border-radius:50px;margin-bottom:18px;}
+.hero-title{font-family:'Fraunces',serif;font-size:clamp(38px,4.5vw,64px);font-weight:900;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.hero-title span{color:var(--green);}
+.hero-title em{font-style:italic;color:var(--orange);}
+.hero-desc{font-size:16px;color:var(--text-mid);line-height:1.7;margin-bottom:32px;max-width:420px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-green{background:var(--green);color:#fff;border:none;padding:14px 32px;border-radius:50px;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:8px;}
+.btn-green:hover{background:var(--green-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(45,140,78,0.3);}
+.btn-outline-green{background:transparent;color:var(--green);border:2px solid var(--green);padding:14px 32px;border-radius:50px;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.25s;}
+.btn-outline-green:hover{background:var(--green-light);}
+.hero-stats{display:flex;gap:32px;margin-top:36px;}
+.stat{display:flex;flex-direction:column;}
+.stat-num{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--green);}
+.stat-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.hero-img-wrap{position:relative;display:flex;align-items:center;justify-content:center;padding:40px 0;}
+.hero-main-img{width:100%;max-width:480px;border-radius:32px;object-fit:cover;height:380px;box-shadow:0 24px 64px rgba(45,140,78,0.2);animation:heroFloat 4s ease-in-out infinite;}
+@keyframes heroFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.hero-bubble{position:absolute;background:#fff;border-radius:16px;padding:10px 16px;box-shadow:0 8px 32px rgba(0,0,0,0.1);font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.hero-bubble.b1{top:20%;left:0;}
+.hero-bubble.b2{bottom:25%;right:0;}
+.bubble-icon{font-size:20px;}
+.bubble-text{display:flex;flex-direction:column;line-height:1.3;}
+.bubble-val{font-size:14px;color:var(--green);}
+.bubble-sub{font-size:11px;color:var(--text-mid);}
+
+/* MARQUEE */
+.marquee-wrap{background:var(--green);padding:11px 0;overflow:hidden;white-space:nowrap;}
+.marquee-inner{display:inline-flex;animation:marquee 22s linear infinite;}
+.m-item{color:rgba(255,255,255,0.9);font-size:12.5px;font-weight:700;letter-spacing:0.5px;padding:0 32px;display:flex;align-items:center;gap:10px;}
+.m-dot{color:var(--yellow);font-size:8px;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* SECTION */
+.section{padding:70px 60px;}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;}
+.section-left .tag{font-size:12px;font-weight:800;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.section-left h2{font-family:'Fraunces',serif;font-size:clamp(26px,3vw,38px);font-weight:900;color:var(--text);}
+.section-left h2 em{font-style:italic;color:var(--green);}
+.see-all{color:var(--green);font-size:13px;font-weight:800;text-decoration:none;cursor:pointer;display:flex;align-items:center;gap:4px;border-bottom:2px solid var(--green);padding-bottom:2px;transition:gap 0.2s;}
+.see-all:hover{gap:8px;}
+
+/* CATEGORY PILLS */
+.cat-pills{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px;}
+.cat-pill{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--border);border-radius:50px;padding:10px 20px;cursor:pointer;font-size:13px;font-weight:700;transition:all 0.2s;white-space:nowrap;}
+.cat-pill:hover,.cat-pill.active{background:var(--green);color:#fff;border-color:var(--green);}
+.cat-pill-icon{font-size:18px;}
+
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;}
+.cat-card{background:#fff;border-radius:20px;padding:20px 12px;text-align:center;cursor:pointer;transition:all 0.3s;border:2px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,0.05);}
+.cat-card:hover{border-color:var(--green);transform:translateY(-4px);box-shadow:var(--card-shadow);}
+.cat-card img{width:80px;height:80px;object-fit:cover;border-radius:16px;margin-bottom:12px;}
+.cat-card-name{font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px;}
+.cat-card-count{font-size:11px;color:var(--text-light);}
+
+/* PRODUCT GRID */
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+.prod-card{background:#fff;border-radius:20px;overflow:hidden;cursor:pointer;transition:all 0.3s;box-shadow:0 2px 12px rgba(0,0,0,0.05);border:2px solid transparent;position:relative;}
+.prod-card:hover{transform:translateY(-6px);box-shadow:var(--card-shadow);border-color:var(--green-light);}
+.prod-img-wrap{position:relative;height:200px;overflow:hidden;background:var(--green-light);}
+.prod-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s;}
+.prod-card:hover .prod-img-wrap img{transform:scale(1.08);}
+.prod-badge{position:absolute;top:12px;left:12px;padding:4px 10px;border-radius:50px;font-size:11px;font-weight:800;}
+.badge-green{background:var(--green);color:#fff;}
+.badge-orange{background:var(--orange);color:#fff;}
+.badge-red{background:var(--red);color:#fff;}
+.badge-yellow{background:var(--yellow);color:var(--text);}
+.wish-btn{position:absolute;top:12px;right:12px;width:34px;height:34px;background:#fff;border-radius:50%;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:all 0.2s;}
+.wish-btn:hover{background:var(--orange);color:#fff;}
+.prod-info{padding:16px;}
+.prod-category{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.prod-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;line-height:1.3;}
+.prod-weight{font-size:12px;color:var(--text-light);margin-bottom:10px;}
+.prod-stars{font-size:12px;color:var(--yellow);letter-spacing:1px;margin-bottom:10px;}
+.prod-bottom{display:flex;align-items:center;justify-content:space-between;}
+run my code .prod-price{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--green);}
+.prod-price-old{font-size:12px;color:var(--text-light);text-decoration:line-through;margin-left:4px;}
+.add-btn{background:var(--green);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;}
+.add-btn:hover{background:var(--green-dark);transform:scale(1.15);}
+
+/* BANNER STRIP */
+.banner-strip{padding:0 60px 60px;}
+.banner-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;}
+.banner-card{border-radius:24px;overflow:hidden;position:relative;height:220px;cursor:pointer;}
+.banner-card img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s;filter:brightness(0.75);}
+.banner-card:hover img{transform:scale(1.05);filter:brightness(0.6);}
+.banner-content{position:absolute;inset:0;padding:32px;display:flex;flex-direction:column;justify-content:flex-end;}
+.banner-tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--yellow);margin-bottom:8px;}
+.banner-title{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:#fff;margin-bottom:8px;line-height:1.2;}
+.banner-sub{font-size:13px;color:rgba(255,255,255,0.85);margin-bottom:16px;}
+.banner-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--green);border:none;padding:9px 20px;border-radius:50px;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.2s;}
+.banner-btn:hover{background:var(--green);color:#fff;}
+
+/* FEATURES */
+.features{background:#fff;padding:50px 60px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+.feature{display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 20px;border-radius:20px;border:2px solid var(--border);transition:all 0.3s;}
+.feature:hover{border-color:var(--green);background:var(--green-light);}
+.feature-icon{font-size:40px;margin-bottom:14px;}
+.feature-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px;}
+.feature-desc{font-size:13px;color:var(--text-mid);line-height:1.6;}
+
+/* ===== CART PAGE ===== */
+#cart{background:var(--off-white);}
+.page-wrap{max-width:1200px;margin:0 auto;padding:50px 40px;}
+.page-title{font-family:'Fraunces',serif;font-size:38px;font-weight:900;margin-bottom:6px;}
+.page-sub{color:var(--text-mid);font-size:15px;margin-bottom:36px;}
+.cart-layout{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start;}
+.cart-list{display:flex;flex-direction:column;gap:14px;}
+.cart-item{background:#fff;border-radius:16px;padding:20px;display:grid;grid-template-columns:90px 1fr auto;gap:16px;align-items:center;box-shadow:0 2px 12px rgba(0,0,0,0.05);transition:box-shadow 0.2s;}
+.cart-item:hover{box-shadow:var(--card-shadow);}
+.cart-item-img{width:90px;height:90px;border-radius:12px;object-fit:cover;background:var(--green-light);}
+.cart-item-category{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:3px;}
+.cart-item-name{font-size:16px;font-weight:800;margin-bottom:3px;}
+.cart-item-wt{font-size:12px;color:var(--text-light);margin-bottom:12px;}
+.qty-row{display:flex;align-items:center;gap:0;}
+.qty-btn{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:#fff;cursor:pointer;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all 0.2s;color:var(--green);}
+.qty-btn:hover{background:var(--green);border-color:var(--green);color:#fff;}
+.qty-num{width:38px;text-align:center;font-size:15px;font-weight:800;}
+.remove-btn{background:none;border:none;color:var(--text-light);font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;transition:color 0.2s;}
+.remove-btn:hover{color:var(--red);}
+.item-price{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--green);text-align:right;}
+.item-old-price{font-size:12px;color:var(--text-light);text-decoration:line-through;text-align:right;}
+
+/* ORDER SUMMARY */
+.summary-box{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.05);position:sticky;top:90px;}
+.summary-title{font-family:'Fraunces',serif;font-size:22px;font-weight:900;margin-bottom:22px;}
+.summary-row{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--text-mid);padding:9px 0;border-bottom:1px solid var(--border);}
+.summary-row.total{color:var(--text);font-size:17px;font-weight:800;border-bottom:none;padding-top:14px;}
+.summary-row.total span:last-child{color:var(--green);font-size:22px;}
+.savings-badge{background:var(--green-light);color:var(--green);font-size:13px;font-weight:800;padding:10px 16px;border-radius:12px;text-align:center;margin:16px 0;}
+.promo-row{display:flex;gap:0;margin:14px 0;}
+.promo-in{flex:1;background:var(--off-white);border:2px solid var(--border);border-right:none;border-radius:12px 0 0 12px;padding:11px 14px;font-size:13px;outline:none;font-family:'Nunito',sans-serif;}
+.promo-in:focus{border-color:var(--green);}
+.promo-apply{background:var(--green);color:#fff;border:none;padding:11px 18px;border-radius:0 12px 12px 0;font-size:12px;font-weight:800;cursor:pointer;transition:background 0.2s;}
+.promo-apply:hover{background:var(--green-dark);}
+.checkout-btn{width:100%;background:linear-gradient(135deg,var(--green),var(--green-mid));color:#fff;border:none;padding:16px;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.25s;box-shadow:0 6px 24px rgba(45,140,78,0.25);}
+.checkout-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(45,140,78,0.35);}
+.secure-note{text-align:center;font-size:12px;color:var(--text-light);margin-top:12px;}
+
+/* ===== CHECKOUT PAGE ===== */
+#checkout{background:var(--off-white);}
+.checkout-layout{display:grid;grid-template-columns:1fr 380px;gap:32px;}
+.form-block{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.05);margin-bottom:20px;}
+.form-block-title{font-family:'Fraunces',serif;font-size:20px;font-weight:900;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg.full{grid-column:1/-1;}
+.form-label{font-size:12px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;}
+.form-input,.form-select{background:var(--off-white);border:2px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'Nunito',sans-serif;outline:none;color:var(--text);transition:border-color 0.25s;width:100%;}
+.form-input:focus,.form-select:focus{border-color:var(--green);}
+.pay-options{display:flex;flex-direction:column;gap:12px;}
+.pay-opt{display:flex;align-items:center;gap:14px;background:var(--off-white);border:2px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;transition:all 0.25s;}
+.pay-opt.sel{background:var(--green-light);border-color:var(--green);}
+.pay-opt input{accent-color:var(--green);}
+.pay-icon{font-size:22px;}
+.pay-label{font-size:14px;font-weight:800;}
+.pay-sub{font-size:12px;color:var(--text-mid);}
+.place-order-btn{width:100%;background:linear-gradient(135deg,var(--green),var(--green-mid));color:#fff;border:none;padding:18px;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.25s;box-shadow:0 6px 24px rgba(45,140,78,0.25);margin-top:8px;}
+.place-order-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(45,140,78,0.35);}
+
+/* Checkout Summary */
+.checkout-summary{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.05);position:sticky;top:90px;}
+.co-items{display:flex;flex-direction:column;gap:14px;margin-bottom:20px;}
+.co-item{display:flex;gap:12px;align-items:center;}
+.co-item img{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--green-light);}
+.co-item-name{font-size:13px;font-weight:700;line-height:1.3;flex:1;}
+.co-item-qty{font-size:12px;color:var(--text-light);}
+.co-item-price{font-size:15px;font-weight:800;color:var(--green);white-space:nowrap;}
+
+/* ===== TRACKING PAGE ===== */
+#tracking{background:var(--off-white);}
+.track-search-box{background:#fff;border-radius:20px;padding:36px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.05);margin-bottom:32px;}
+.track-search-box h3{font-family:'Fraunces',serif;font-size:26px;font-weight:900;margin-bottom:6px;}
+.track-search-box p{color:var(--text-mid);font-size:14px;margin-bottom:22px;}
+.track-form{display:flex;max-width:480px;margin:0 auto;gap:0;}
+.track-in{flex:1;background:var(--off-white);border:2px solid var(--border);border-right:none;border-radius:12px 0 0 12px;padding:14px 18px;font-size:14px;font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.25s;}
+.track-in:focus{border-color:var(--green);}
+.track-btn{background:var(--green);color:#fff;border:none;padding:14px 24px;border-radius:0 12px 12px 0;font-size:13px;font-weight:800;cursor:pointer;transition:background 0.2s;}
+.track-btn:hover{background:var(--green-dark);}
+
+#trackResult{display:none;}
+.order-info-card{background:#fff;border-radius:20px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,0.05);margin-bottom:24px;}
+.order-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:36px;}
+.meta-item{padding:16px;background:var(--green-light);border-radius:14px;text-align:center;}
+.meta-label{font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.meta-val{font-size:15px;font-weight:800;color:var(--text);}
+.meta-val.green{color:var(--green);}
+
+/* TIMELINE */
+.timeline-wrap{padding:0 10px;}
+.timeline-track{display:flex;justify-content:space-between;position:relative;margin-bottom:8px;}
+.timeline-track::before{content:'';position:absolute;top:22px;left:22px;right:22px;height:3px;background:var(--border);z-index:0;}
+.tl-progress{position:absolute;top:22px;left:22px;height:3px;background:linear-gradient(to right,var(--green),var(--green-mid));z-index:1;transition:width 1s ease;width:55%;}
+.tl-step{display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;z-index:2;}
+.tl-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;border:3px solid var(--border);background:#fff;transition:all 0.4s;}
+.tl-dot.done{background:var(--green);border-color:var(--green);}
+.tl-dot.active{background:#fff;border-color:var(--green);box-shadow:0 0 0 6px rgba(45,140,78,0.15);animation:tlPulse 2s ease infinite;}
+@keyframes tlPulse{0%,100%{box-shadow:0 0 0 6px rgba(45,140,78,0.15);}50%{box-shadow:0 0 0 12px rgba(45,140,78,0.08);}}
+.tl-label{font-size:12px;font-weight:800;text-align:center;color:var(--text-light);}
+.tl-label.done{color:var(--green);}
+.tl-label.active{color:var(--text);}
+.tl-date{font-size:11px;color:var(--text-light);}
+
+.delivery-detail-card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.05);display:grid;grid-template-columns:1fr 1fr;margin-bottom:24px;}
+.delivery-img-side img{width:100%;height:100%;object-fit:cover;min-height:240px;}
+.delivery-info-side{padding:32px;display:flex;flex-direction:column;gap:16px;}
+.delivery-heading{font-family:'Fraunces',serif;font-size:22px;font-weight:900;}
+.detail-row{display:flex;gap:12px;align-items:flex-start;}
+.detail-ico{font-size:20px;line-height:1.4;}
+.detail-txt{font-size:14px;color:var(--text-mid);line-height:1.6;}
+.detail-txt strong{color:var(--text);}
+
+.ordered-items-card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.05);}
+.oi-title{font-family:'Fraunces',serif;font-size:20px;font-weight:900;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.oi-list{display:flex;flex-direction:column;gap:14px;}
+.oi-item{display:flex;gap:16px;align-items:center;padding:14px;background:var(--off-white);border-radius:14px;}
+.oi-img{width:72px;height:72px;border-radius:12px;object-fit:cover;background:var(--green-light);}
+.oi-name{font-size:15px;font-weight:800;margin-bottom:3px;}
+.oi-cat{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:3px;}
+.oi-wt{font-size:12px;color:var(--text-light);}
+.oi-price{margin-left:auto;font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--green);white-space:nowrap;}
+
+/* FOOTER */
+footer{background:var(--green-dark);color:#fff;padding:60px;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;}
+.footer-logo{font-family:'Fraunces',serif;font-size:28px;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.footer-desc{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.8;}
+.footer-col-title{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--yellow);margin-bottom:16px;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:14px;cursor:pointer;transition:color 0.2s;}
+.footer-links a:hover{color:#fff;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,0.6);}
+
+@media(max-width:960px){
+  nav{padding:0 20px;}.topbar{padding:7px 20px;}
+  .hero{grid-template-columns:1fr;padding:40px 20px;}.hero-img-wrap{display:none;}
+  .section{padding:50px 20px;}.banner-strip{padding:0 20px 40px;}
+  .cat-grid{grid-template-columns:repeat(3,1fr);}.prod-grid{grid-template-columns:repeat(2,1fr);}
+  .cart-layout,.checkout-layout{grid-template-columns:1fr;}
+  .order-meta{grid-template-columns:repeat(2,1fr);}
+  .delivery-detail-card{grid-template-columns:1fr;}
+  .features{grid-template-columns:repeat(2,1fr);padding:40px 20px;}
+  .footer-top{grid-template-columns:1fr 1fr;}.page-wrap{padding:40px 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-icon">🛒</div>
+  <div class="loader-text">FreshMart</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Item added to cart!</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div>🌿 100% Fresh &amp; Organic Products | Free Delivery on orders above ₹499</div>
+  <div class="topbar-links">
+    <a onclick="showPage('tracking')">Track Order</a>
+    <a>Help</a>
+    <a>Login</a>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo" onclick="showPage('home')"><span class="logo-leaf">🛍️</span> FreshMart</div>
+  <div class="search-bar">
+    <select class="search-select">
+      <option>All</option><option>Vegetables</option><option>Fruits</option><option>Dairy</option><option>Grains</option><option>Organic</option>
+    </select>
+    <input class="search-input" placeholder="Find fresh products...">
+    <button class="search-btn">🔎</button>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-icon-btn" title="Wishlist">❤️</button>
+    <div id="authContainer">
+      <button class="nav-icon-btn" onclick="showPage('login')" title="Login">🔐</button>
+      <button class="nav-cart-btn" onclick="showPage('cart')">
+        🛒 Cart <span id="cartBadge" class="badge">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ======== HOME PAGE ======== -->
+<div id="home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">🚀 30-Min Delivery in Lucknow</div>
+      <h1 class="hero-title">Fresh from the<br><em>Farm</em>, <span>Straight</span><br>to Your Door</h1>
+      <p class="hero-desc">Order 5000+ fresh groceries, organic produce & daily essentials. Same-day delivery guaranteed across Lucknow & nearby areas.</p>
+      <div class="hero-btns">
+        <button class="btn-green" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">🛍️ Shop Now</button>
+        <button class="btn-outline-green">View Offers →</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">50K+</span><span class="stat-label">Happy Customers</span></div>
+        <div class="stat"><span class="stat-num">5000+</span><span class="stat-label">Products</span></div>
+        <div class="stat"><span class="stat-num">30 Min</span><span class="stat-label">Avg Delivery</span></div>
+      </div>
+    </div>
+    <div class="hero-img-wrap">
+      <img class="hero-main-img" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=85" alt="Fresh Groceries">
+      <div class="hero-bubble b1">
+        <div class="bubble-icon">🥦</div>
+        <div class="bubble-text"><span class="bubble-val">100% Organic</span><span class="bubble-sub">Certified fresh</span></div>
+      </div>
+      <div class="hero-bubble b2">
+        <div class="bubble-icon">⭐</div>
+        <div class="bubble-text"><span class="bubble-val">4.9 Rating</span><span class="bubble-sub">50K+ reviews</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-inner">
+      <span class="m-item">🥕 Fresh Vegetables Daily <span class="m-dot">●</span></span>
+      <span class="m-item">🍎 Seasonal Fruits <span class="m-dot">●</span></span>
+      <span class="m-item">🥛 Farm-Fresh Dairy <span class="m-dot">●</span></span>
+      <span class="m-item">🌾 Organic Grains <span class="m-dot">●</span></span>
+      <span class="m-item">🚚 Free Delivery ₹499+ <span class="m-dot">●</span></span>
+      <span class="m-item">♻️ Zero Pesticide <span class="m-dot">●</span></span>
+      <span class="m-item">🥕 Fresh Vegetables Daily <span class="m-dot">●</span></span>
+      <span class="m-item">🍎 Seasonal Fruits <span class="m-dot">●</span></span>
+      <span class="m-item">🥛 Farm-Fresh Dairy <span class="m-dot">●</span></span>
+      <span class="m-item">🌾 Organic Grains <span class="m-dot">●</span></span>
+      <span class="m-item">🚚 Free Delivery ₹499+ <span class="m-dot">●</span></span>
+      <span class="m-item">♻️ Zero Pesticide <span class="m-dot">●</span></span>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-left">
+        <div class="tag">Browse</div>
+        <h2>Shop by <em>Category</em></h2>
+      </div>
+      <a class="see-all">See All →</a>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&q=80" alt="Vegetables">
+        <div class="cat-card-name">Vegetables</div>
+        <div class="cat-card-count">120+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=200&q=80" alt="Fruits">
+        <div class="cat-card-name">Fresh Fruits</div>
+        <div class="cat-card-count">85+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&q=80" alt="Dairy">
+        <div class="cat-card-name">Dairy & Eggs</div>
+        <div class="cat-card-count">60+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&q=80" alt="Bakery">
+        <div class="cat-card-name">Bakery</div>
+        <div class="cat-card-count">45+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&q=80" alt="Grains">
+        <div class="cat-card-name">Rice & Grains</div>
+        <div class="cat-card-count">75+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200&q=80" alt="Spices">
+        <div class="cat-card-name">Spices & Masala</div>
+        <div class="cat-card-count">90+ items</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="section" id="products" style="background:#fff;padding-top:60px;">
+    <div class="section-head">
+      <div class="section-left">
+        <div class="tag">Trending</div>
+        <h2>Fresh <em>Picks Today</em></h2>
+      </div>
+      <a class="see-all">See All →</a>
+    </div>
+    <div class="cat-pills">
+      <div class="cat-pill active"><span class="cat-pill-icon">🌟</span>Best Sellers</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🥬</span>Vegetables</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🍎</span>Fruits</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🥛</span>Dairy</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🌾</span>Grains</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🧄</span>Spices</div>
+    </div>
+    <div class="prod-grid">
+      <!-- P1 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1627735341492-bc9c96fa6897?w=400&q=80" alt="Tomatoes">
+          <span class="prod-badge badge-green">Organic</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Vegetables</div>
+          <div class="prod-name">Red Tomatoes</div>
+          <div class="prod-weight">500g Pack</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹35</span><span class="prod-price-old">₹50</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P2 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1550828520-4cb496926fc9?w=400&q=80" alt="Spinach">
+          <span class="prod-badge badge-green">Farm Fresh</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Leafy Greens</div>
+          <div class="prod-name">Fresh Spinach</div>
+          <div class="prod-weight">250g Bundle</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹28</span><span class="prod-price-old">₹40</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P3 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&q=80" alt="Mangoes">
+          <span class="prod-badge badge-orange">Seasonal</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Fruits</div>
+          <div class="prod-name">Alphonso Mangoes</div>
+          <div class="prod-weight">1kg Box</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹180</span><span class="prod-price-old">₹250</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P4 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&q=80" alt="Milk">
+          <span class="prod-badge badge-yellow">Daily Fresh</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Dairy</div>
+          <div class="prod-name">Full Cream Milk</div>
+          <div class="prod-weight">1 Litre Pouch</div>
+          <div class="prod-stars">★★★★☆</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹62</span><span class="prod-price-old">₹70</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P5 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1596591868231-05e808fd131d?w=400&q=80" alt="Bananas">
+          <span class="prod-badge badge-green">Best Value</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Fruits</div>
+          <div class="prod-name">Ripe Bananas</div>
+          <div class="prod-weight">Dozen (12 pcs)</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹48</span><span class="prod-price-old">₹60</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P6 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&q=80" alt="Potatoes">
+          <span class="prod-badge badge-orange">Sale 30%</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Vegetables</div>
+          <div class="prod-name">Fresh Potatoes</div>
+          <div class="prod-weight">2kg Bag</div>
+          <div class="prod-stars">★★★★☆</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹55</span><span class="prod-price-old">₹80</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P7 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1582819509237-d5b75f20ff7a?w=400&q=80" alt="Eggs">
+          <span class="prod-badge badge-yellow">Farm Fresh</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Eggs</div>
+          <div class="prod-name">Country Eggs</div>
+          <div class="prod-weight">6 Piece Tray</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹72</span><span class="prod-price-old">₹90</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P8 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1465014925804-7b9ede58d0d7?w=400&q=80" alt="Onions">
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Vegetables</div>
+          <div class="prod-name">Red Onions</div>
+          <div class="prod-weight">1kg Bag</div>
+          <div class="prod-stars">★★★★☆</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹40</span><span class="prod-price-old">₹55</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER STRIP -->
+  <div class="banner-strip">
+    <div class="banner-grid">
+      <div class="banner-card">
+        <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=900&q=80" alt="Fruits Sale">
+        <div class="banner-content">
+          <div class="banner-tag">🍎 Weekend Special</div>
+          <div class="banner-title">Fresh Fruits<br>Up to 50% Off</div>
+          <div class="banner-sub">Only for today — limited stock</div>
+          <button class="banner-btn">Shop Fruits →</button>
+        </div>
+      </div>
+      <div class="banner-card">
+        <img src="https://images.unsplash.com/photo-1506617420156-8e4536971650?w=600&q=80" alt="Organic">
+        <div class="banner-content">
+          <div class="banner-tag">🌿 Certified Organic</div>
+          <div class="banner-title">100% Organic<br>Vegetables</div>
+          <div class="banner-sub">Zero pesticides, pure taste</div>
+          <button class="banner-btn">Explore →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🚀</div>
+      <div class="feature-title">30-Min Delivery</div>
+      <div class="feature-desc">Ultra-fast delivery right to your doorstep, even on holidays.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌿</div>
+      <div class="feature-title">100% Organic</div>
+      <div class="feature-desc">Certified fresh produce sourced directly from local farms.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">💰</div>
+      <div class="feature-title">Best Prices</div>
+      <div class="feature-desc">Farm-direct pricing means you always get the best deals.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔄</div>
+      <div class="feature-title">Easy Returns</div>
+      <div class="feature-desc">Not fresh? Get a full refund or replacement — no questions asked.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">🥬 FreshMart</div>
+        <p class="footer-desc">India's freshest grocery delivery service. Farm-to-table quality, delivered in 30 minutes across Lucknow and surrounding areas.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Shop</div>
+        <ul class="footer-links">
+          <li><a>Vegetables</a></li><li><a>Fruits</a></li><li><a>Dairy & Eggs</a></li><li><a>Grains & Pulses</a></li><li><a>Spices</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Support</div>
+        <ul class="footer-links">
+          <li><a onclick="showPage('tracking')">Track Order</a></li><li><a>Returns</a></li><li><a>FAQ</a></li><li><a>Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a>About Us</a></li><li><a>Careers</a></li><li><a>Blog</a></li><li><a>Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 FreshMart. All rights reserved. Made with 💚 in Lucknow</span>
+      <span>🔒 Secure Payments · 🚚 Fast Delivery</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ======== CART PAGE ======== -->
+<div id="cart" class="page">
+  <div class="page-wrap">
+    <h1 class="page-title">🛒 Your Cart</h1>
+    <p class="page-sub">4 items · Delivery by Today, 6:00 PM</p>
+    <div class="cart-layout">
+      <div class="cart-list">
+        <div class="cart-item">
+          <img class="cart-item-img" src="https://images.unsplash.com/photo-1627735341492-bc9c96fa6897?w=200&q=80" alt="Tomatoes">
+          <div>
+            <div class="cart-item-category">Vegetables</div>
+            <div class="cart-item-name">Red Tomatoes</div>
+            <div class="cart-item-wt">500g Pack</div>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">2</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+            <button class="remove-btn">🗑 Remove</button>
+          </div>
+          <div style="text-align:right;">
+            <div class="item-old-price">₹100</div>
+            <div class="item-price">₹70</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <img class="cart-item-img" src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=200&q=80" alt="Mangoes">
+          <div>
+            <div class="cart-item-category">Fruits</div>
+            <div class="cart-item-name">Alphonso Mangoes</div>
+            <div class="cart-item-wt">1kg Box</div>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+            <button class="remove-btn">🗑 Remove</button>
+          </div>
+          <div style="text-align:right;">
+            <div class="item-old-price">₹250</div>
+            <div class="item-price">₹180</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <img class="cart-item-img" src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=200&q=80" alt="Milk">
+          <div>
+            <div class="cart-item-category">Dairy</div>
+            <div class="cart-item-name">Full Cream Milk</div>
+            <div class="cart-item-wt">1 Litre Pouch</div>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">3</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+            <button class="remove-btn">🗑 Remove</button>
+          </div>
+          <div style="text-align:right;">
+            <div class="item-old-price">₹210</div>
+            <div class="item-price">₹186</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <img class="cart-item-img" src="https://images.unsplash.com/photo-1582819509237-d5b75f20ff7a?w=200&q=80" alt="Eggs">
+          <div>
+            <div class="cart-item-category">Eggs</div>
+            <div class="cart-item-name">Country Eggs</div>
+            <div class="cart-item-wt">6 Piece Tray</div>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+            <button class="remove-btn">🗑 Remove</button>
+          </div>
+          <div style="text-align:right;">
+            <div class="item-old-price">₹90</div>
+            <div class="item-price">₹72</div>
+          </div>
+        </div>
+        <button class="btn-outline-green" onclick="showPage('home')" style="margin-top:8px;">← Continue Shopping</button>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="summary-box">
+        <div class="summary-title">Bill Details</div>
+        <div class="summary-row"><span>MRP Total</span><span>₹650</span></div>
+        <div class="summary-row"><span>Product Discount</span><span style="color:var(--green)">−₹142</span></div>
+        <div class="summary-row"><span>Delivery Charges</span><span style="color:var(--green)">FREE 🎉</span></div>
+        <div class="summary-row"><span>Handling Charges</span><span>₹5</span></div>
+        <div class="summary-row total"><span>Total Amount</span><span>₹513</span></div>
+        <div class="savings-badge">🎉 You're saving ₹142 on this order!</div>
+        <div class="promo-row">
+          <input class="promo-in" placeholder="Enter promo code" value="FRESH20">
+          <button class="promo-apply">Apply</button>
+        </div>
+        <button class="checkout-btn" onclick="showPage('checkout')">Proceed to Checkout 🛍️</button>
+        <div class="secure-note">🔒 100% Secure · SSL Encrypted</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== CHECKOUT PAGE ======== -->
+<div id="checkout" class="page">
+  <div class="page-wrap">
+    <h1 class="page-title">📦 Checkout</h1>
+    <p class="page-sub">Almost there! Complete your delivery details.</p>
+    <div class="checkout-layout">
+      <div>
+        <!-- Delivery Info -->
+        <div class="form-block">
+          <div class="form-block-title">📍 Delivery Address</div>
+          <div class="form-grid">
+            <div class="fg"><label class="form-label">First Name</label><input class="form-input" placeholder="Rahul"></div>
+            <div class="fg"><label class="form-label">Last Name</label><input class="form-input" placeholder="Verma"></div>
+            <div class="fg"><label class="form-label">Mobile Number</label><input class="form-input" placeholder="+91 98765 43210"></div>
+            <div class="fg"><label class="form-label">Email</label><input class="form-input" placeholder="rahul@gmail.com" type="email"></div>
+            <div class="fg full"><label class="form-label">Full Address</label><input class="form-input" placeholder="House No, Street, Colony"></div>
+            <div class="fg"><label class="form-label">City</label><input class="form-input" placeholder="Lucknow" value="Lucknow"></div>
+            <div class="fg"><label class="form-label">State</label>
+              <select class="form-select"><option>Uttar Pradesh</option><option>Maharashtra</option><option>Delhi</option></select>
+            </div>
+            <div class="fg"><label class="form-label">PIN Code</label><input class="form-input" placeholder="226001"></div>
+            <div class="fg"><label class="form-label">Delivery Slot</label>
+              <select class="form-select"><option>Today 2PM–4PM</option><option>Today 4PM–6PM</option><option>Tomorrow 10AM–12PM</option></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="form-block">
+          <div class="form-block-title">💳 Payment Method</div>
+          <div class="pay-options">
+            <div class="pay-opt sel" onclick="selPay(this)">
+              <input type="radio" name="pay" checked>
+              <span class="pay-icon">💳</span>
+              <div><div class="pay-label">Credit / Debit Card</div><div class="pay-sub">All major cards accepted</div></div>
+            </div>
+            <div class="pay-opt" onclick="selPay(this)">
+              <input type="radio" name="pay">
+              <span class="pay-icon">📱</span>
+              <div><div class="pay-label">UPI Payment</div><div class="pay-sub">GPay, PhonePe, Paytm, BHIM</div></div>
+            </div>
+            <div class="pay-opt" onclick="selPay(this)">
+              <input type="radio" name="pay">
+              <span class="pay-icon">🏦</span>
+              <div><div class="pay-label">Net Banking</div><div class="pay-sub">All major Indian banks</div></div>
+            </div>
+            <div class="pay-opt" onclick="selPay(this)">
+              <input type="radio" name="pay">
+              <span class="pay-icon">💵</span>
+              <div><div class="pay-label">Cash on Delivery</div><div class="pay-sub">Pay when your order arrives</div></div>
+            </div>
+          </div>
+          <div class="form-grid" style="margin-top:18px;">
+            <div class="fg full"><label class="form-label">Card Number</label><input class="form-input" placeholder="4532 •••• •••• 8765"></div>
+            <div class="fg"><label class="form-label">Expiry</label><input class="form-input" placeholder="MM / YY"></div>
+            <div class="fg"><label class="form-label">CVV</label><input class="form-input" placeholder="•••" type="password"></div>
+          </div>
+        </div>
+        <button class="place-order-btn" onclick="placeOrder()">🎉 Place Order — ₹513</button>
+      </div>
+
+      <!-- Checkout Summary -->
+      <div class="checkout-summary">
+        <div class="summary-title">Order Summary</div>
+        <div class="co-items">
+          <div class="co-item">
+            <img src="https://images.unsplash.com/photo-1627735341492-bc9c96fa6897?w=100&q=80" alt="">
+            <div><div class="co-item-name">Red Tomatoes</div><div class="co-item-qty">×2 · 500g</div></div>
+            <div class="co-item-price">₹70</div>
+          </div>
+          <div class="co-item">
+            <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=100&q=80" alt="">
+            <div><div class="co-item-name">Alphonso Mangoes</div><div class="co-item-qty">×1 · 1kg</div></div>
+            <div class="co-item-price">₹180</div>
+          </div>
+          <div class="co-item">
+            <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=100&q=80" alt="">
+            <div><div class="co-item-name">Full Cream Milk</div><div class="co-item-qty">×3 · 1L</div></div>
+            <div class="co-item-price">₹186</div>
+          </div>
+          <div class="co-item">
+            <img src="https://images.unsplash.com/photo-1582819509237-d5b75f20ff7a?w=100&q=80" alt="">
+            <div><div class="co-item-name">Country Eggs</div><div class="co-item-qty">×1 · 6pc</div></div>
+            <div class="co-item-price">₹72</div>
+          </div>
+        </div>
+        <div class="summary-row"><span>Subtotal</span><span>₹508</span></div>
+        <div class="summary-row"><span>Delivery</span><span style="color:var(--green)">FREE</span></div>
+        <div class="summary-row"><span>Handling</span><span>₹5</span></div>
+        <div class="summary-row total"><span>Total</span><span>₹513</span></div>
+        <div style="margin-top:16px;background:var(--green-light);border-radius:12px;padding:14px;font-size:13px;">
+          <div style="font-weight:800;color:var(--green);margin-bottom:4px;">🚚 Delivery Slot</div>
+          <div style="color:var(--text-mid);">Today, 4:00 PM – 6:00 PM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== TRACKING PAGE ======== -->
+<div id="tracking" class="page">
+  <div class="page-wrap">
+    <h1 class="page-title">📦 Track Your Order</h1>
+    <p class="page-sub">Enter your order ID to get live delivery updates</p>
+
+    <div class="track-search-box">
+      <h3>🔍 Order Tracker</h3>
+      <p>Enter your FreshMart Order ID or phone number</p>
+      <div class="track-form">
+        <input class="track-in" placeholder="e.g. FM-2025-78234" value="FM-2025-78234">
+        <button class="track-btn" onclick="showTrack()">Track →</button>
+      </div>
+    </div>
+
+    <div id="trackResult">
+      <div class="order-info-card">
+        <div class="order-meta">
+          <div class="meta-item">
+            <div class="meta-label">Order ID</div>
+            <div class="meta-val green">FM-2025-78234</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Order Date</div>
+            <div class="meta-val">22 Apr, 2025</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Expected Delivery</div>
+            <div class="meta-val">Today, 4–6 PM</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="meta-val green">🛵 Out for Delivery</div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-wrap">
+          <div class="timeline-track">
+            <div class="tl-progress"></div>
+            <div class="tl-step">
+              <div class="tl-dot done">✅</div>
+              <div class="tl-label done">Order Placed</div>
+              <div class="tl-date">9:30 AM</div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot done">✅</div>
+              <div class="tl-label done">Confirmed</div>
+              <div class="tl-date">9:32 AM</div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot done">✅</div>
+              <div class="tl-label done">Packed</div>
+              <div class="tl-date">10:15 AM</div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot active">🛵</div>
+              <div class="tl-label active">Out for Delivery</div>
+              <div class="tl-date">Now</div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot" style="opacity:0.35">🏠</div>
+              <div class="tl-label">Delivered</div>
+              <div class="tl-date">~4–6 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivery Detail -->
+      <div class="delivery-detail-card">
+        <div class="delivery-img-side">
+          <img src="https://images.unsplash.com/photo-1587355760421-b9de3226a046?w=600&q=80" alt="Delivery">
+        </div>
+        <div class="delivery-info-side">
+          <div class="delivery-heading">Delivery Info</div>
+          <div class="detail-row">
+            <div class="detail-ico">🛵</div>
+            <div class="detail-txt"><strong>Delivery Partner:</strong> Raju Kumar<br>📞 +91 98001 12345</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-ico">📍</div>
+            <div class="detail-txt"><strong>Current Location:</strong> Hazratganj, Lucknow<br>~2.4 km from your address</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-ico">🏠</div>
+            <div class="detail-txt"><strong>Delivering to:</strong> House 12, Green Park<br>Lucknow – 226001</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-ico">⏱️</div>
+            <div class="detail-txt"><strong>ETA:</strong> Today 4:00 PM – 6:00 PM<br>22 April 2025</div>
+          </div>
+          <div style="background:var(--green-light);border-radius:12px;padding:12px;font-size:13px;color:var(--green);font-weight:800;">
+            🎉 Your fresh groceries are almost there!
+          </div>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="ordered-items-card">
+        <div class="oi-title">Items in This Order</div>
+        <div class="oi-list">
+          <div class="oi-item">
+            <img class="oi-img" src="https://images.unsplash.com/photo-1627735341492-bc9c96fa6897?w=150&q=80" alt="Tomatoes">
+            <div><div class="oi-cat">Vegetables</div><div class="oi-name">Red Tomatoes</div><div class="oi-wt">500g × 2</div></div>
+            <div class="oi-price">₹70</div>
+          </div>
+          <div class="oi-item">
+            <img class="oi-img" src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=150&q=80" alt="Mangoes">
+            <div><div class="oi-cat">Fruits</div><div class="oi-name">Alphonso Mangoes</div><div class="oi-wt">1kg × 1</div></div>
+            <div class="oi-price">₹180</div>
+          </div>
+          <div class="oi-item">
+            <img class="oi-img" src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=150&q=80" alt="Milk">
+            <div><div class="oi-cat">Dairy</div><div class="oi-name">Full Cream Milk</div><div class="oi-wt">1L × 3</div></div>
+            <div class="oi-price">₹186</div>
+          </div>
+          <div class="oi-item">
+            <img class="oi-img" src="https://images.unsplash.com/photo-1582819509237-d5b75f20ff7a?w=150&q=80" alt="Eggs">
+            <div><div class="oi-cat">Eggs</div><div class="oi-name">Country Eggs</div><div class="oi-wt">6pc × 1</div></div>
+            <div class="oi-price">₹72</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:15px;color:var(--text-mid);">Total Paid</span>
+          <span style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--green);">₹513</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Loader
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const l=document.getElementById('loader');
+    l.style.opacity='0';
+    setTimeout(()=>l.style.display='none',500);
+  },1000);
+});
+
+// Page switch
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Toast
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg||'✓ Added to cart!';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// Cart count
+let count=4;
+function addToCart(){
+  count++;
+  document.getElementById('cartBadge').textContent=count;
+  showToast('🛒 Item added to cart!');
+}
+
+// Qty change
+function changeQty(btn,dir){
+  const wrap=btn.parentElement;
+  const el=wrap.querySelector('.qty-num');
+  let n=parseInt(el.textContent)+dir;
+  if(n<1)n=1;
+  el.textContent=n;
+}
+
+// Payment select
+function selPay(el){
+  document.querySelectorAll('.pay-opt').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+  el.querySelector('input').checked=true;
+}
+
+// Place order
+function placeOrder(){
+  showToast('🎉 Order placed successfully!');
+  setTimeout(()=>showPage('tracking'),800);
+}
+
+// Show tracking
+function showTrack(){
+  document.getElementById('trackResult').style.display='block';
+  document.getElementById('trackResult').style.animation='fadeIn 0.5s ease';
+  setTimeout(()=>document.getElementById('trackResult').scrollIntoView({behavior:'smooth'}),100);
+}
+
+// Category pills
+document.querySelectorAll('.cat-pill').forEach(p=>{
+  p.addEventListener('click',()=>{
+    document.querySelectorAll('.cat-pill').forEach(x=>x.classList.remove('active'));
+    p.classList.add('active');
+  });
+});
+
+// Scroll animations
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}
+  });
+},{threshold:0.1});
+document.querySelectorAll('.prod-card,.cat-card,.feature,.banner-card').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(24px)';
+  el.style.transition='opacity 0.5s ease, transform 0.5s ease';
+  obs.observe(el);
+});
+</script>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-firestore.js"></script>
+
+<!-- Firebase Config -->
+<script src="js/firebase-config.js"></script>
+
+</body>
+</html>

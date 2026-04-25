@@ -1,0 +1,30 @@
+{
+  "name": "freshmart-grocery",
+  "version": "1.0.0",
+  "description": "Modern e-commerce grocery store website with Firebase backend",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server",
+    "build": "echo 'Build process not configured yet'",
+    "minify-css": "cssnano css/*.css --output css/style.min.css",
+    "minify-js": "terser js/main.js --output js/main.min.js"
+  },
+  "keywords": [
+    "grocery",
+    "ecommerce",
+    "freshmart",
+    "vegetables",
+    "fruits",
+    "firebase"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^8.6.0"
+  },
+  "devDependencies": {
+    "cssnano": "^5.0.0",
+    "http-server": "^14.0.0",
+    "terser": "^5.0.0"
+  }
+}

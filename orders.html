@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders - FreshMart</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2d8c4e;
+  --green-dark: #1e6338;
+  --green-light: #e8f5ec;
+  --orange: #f97316;
+  --yellow: #fbbf24;
+  --text: #1a1a1a;
+  --text-mid: #4a5568;
+  --text-light: #9ca3af;
+  --border: #e8f0e4;
+  --white: #ffffff;
+  --off-white: #fafaf7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; background: var(--off-white); }
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 32px;
+}
+
+.order-card {
+  background: var(--white);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.order-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+  padding: 20px;
+  background: var(--green-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.order-id {
+  font-weight: 800;
+  color: var(--green);
+  font-size: 14px;
+}
+
+.order-date {
+  font-size: 12px;
+  color: var(--text-mid);
+}
+
+.order-status {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.status-confirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-processing {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-shipped {
+  background: #dbeafe;
+  color: #0c4a6e;
+}
+
+.status-delivered {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.order-body {
+  padding: 20px;
+}
+
+.order-items {
+  margin-bottom: 16px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.item-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.item-qty {
+  color: var(--text-mid);
+}
+
+.item-price {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 2px solid var(--border);
+  margin-top: 16px;
+}
+
+.total-label {
+  font-weight: 800;
+  color: var(--text);
+}
+
+.total-amount {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--green);
+}
+
+.order-footer {
+  padding: 16px 20px;
+  background: var(--off-white);
+  display: flex;
+  gap: 12px;
+}
+
+.btn-track {
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-track:hover {
+  background: var(--green-dark);
+}
+
+.btn-repeat {
+  background: var(--orange);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-repeat:hover {
+  background: #ea580c;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--white);
+  border-radius: 12px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.empty-text {
+  color: var(--text-mid);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.btn-shop {
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-shop:hover {
+  background: var(--green-dark);
+}
+
+.timeline {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--green-light);
+  border-radius: 8px;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+.timeline-icon {
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.timeline-content h4 {
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.timeline-content p {
+  color: var(--text-mid);
+  font-size: 12px;
+}
+
+@media (max-width: 640px) {
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .order-item {
+    flex-direction: column;
+  }
+
+  .item-price {
+    margin-top: 4px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>📦 My Orders</h1>
+
+  <div id="ordersContainer">
+    <!-- Orders will be loaded here -->
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-firestore.js"></script>
+<script src="js/firebase-config.js"></script>
+
+<script>
+// Load orders
+async function loadOrders() {
+  if (!currentUser) {
+    window.location.href = 'auth.html';
+    return;
+  }
+
+  try {
+    const orders = await getUserOrders();
+
+    const container = document.getElementById('ordersContainer');
+
+    if (orders.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🛒</div>
+          <h2 class="empty-title">No Orders Yet</h2>
+          <p class="empty-text">You haven't placed any orders yet. Start shopping now!</p>
+          <a href="grocery.html" class="btn-shop">Continue Shopping</a>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = orders.map(order => `
+      <div class="order-card">
+        <div class="order-header">
+          <div>
+            <div class="order-id">Order #${order.orderId}</div>
+            <div class="order-date">${new Date(order.createdAt.toDate()).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+          </div>
+          <span class="order-status status-${order.status}">${order.status}</span>
+        </div>
+
+        <div class="order-body">
+          <div class="order-items">
+            ${order.items.map(item => `
+              <div class="order-item">
+                <div>
+                  <div class="item-name">${item.productName}</div>
+                  <div class="item-qty">Qty: ${item.qty}</div>
+                </div>
+                <div class="item-price">₹${(item.price * item.qty).toFixed(2)}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="order-total">
+            <span class="total-label">Total Amount:</span>
+            <span class="total-amount">₹${order.total.toFixed(2)}</span>
+          </div>
+
+          <div style="margin-top: 16px; padding: 12px; background: var(--off-white); border-radius: 6px; font-size: 12px; color: var(--text-mid);">
+            <strong>Est. Delivery:</strong> ${new Date(order.estimatedDelivery.toDate()).toLocaleDateString('en-IN')}
+            <br>
+            <strong>Payment:</strong> ${order.paymentMethod || 'Online'}
+          </div>
+
+          <div class="timeline">
+            <h4 style="margin-bottom: 12px; color: var(--text);">📍 Tracking</h4>
+            ${order.trackingUpdates.slice(0, 3).map(update => `
+              <div class="timeline-item">
+                <span class="timeline-icon">✓</span>
+                <div class="timeline-content">
+                  <h4>${update.status}</h4>
+                  <p>${update.message}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="order-footer">
+          <button class="btn-track" onclick="showOrderDetails('${order.orderId}')">View Details</button>
+          <button class="btn-repeat" onclick="repeatOrder('${order.orderId}')">Reorder</button>
+        </div>
+      </div>
+    `).join('');
+
+  } catch (error) {
+    console.error('Error loading orders:', error);
+    document.getElementById('ordersContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">❌</div>
+        <h2 class="empty-title">Error Loading Orders</h2>
+        <p class="empty-text">${error.message}</p>
+      </div>
+    `;
+  }
+}
+
+// Show order details
+async function showOrderDetails(orderId) {
+  try {
+    const orderDoc = await db.collection('orders').doc(orderId).get();
+    const order = orderDoc.data();
+    
+    const detailsHtml = `
+      <div style="background: var(--white); padding: 24px; border-radius: 12px; margin-top: 20px;">
+        <h3 style="margin-bottom: 16px; color: var(--text);">Order #${order.orderId}</h3>
+        
+        <div style="background: var(--green-light); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+          <h4 style="color: var(--green); margin-bottom: 12px;">📍 Full Tracking History</h4>
+          ${order.trackingUpdates.map(update => `
+            <div style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+              <strong style="color: var(--text);">${update.status}</strong>
+              <p style="color: var(--text-mid); font-size: 12px; margin-top: 2px;">${update.message}</p>
+              <small style="color: var(--text-light);">${new Date(update.timestamp.toDate()).toLocaleString('en-IN')}</small>
+            </div>
+          `).join('')}
+        </div>
+
+        <button onclick="this.parentElement.style.display='none'" style="background: var(--text-mid); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Close</button>
+      </div>
+    `;
+
+    const container = document.getElementById('ordersContainer');
+    const orderElement = event.target.closest('.order-card');
+    orderElement.insertAdjacentHTML('afterend', detailsHtml);
+    
+  } catch (error) {
+    alert('Error loading order details: ' + error.message);
+  }
+}
+
+// Repeat order
+async function repeatOrder(orderId) {
+  try {
+    const orderDoc = await db.collection('orders').doc(orderId).get();
+    const order = orderDoc.data();
+
+    // Add items to cart
+    for (const item of order.items) {
+      await addToCartFirebase(item.productId, item.productName, item.price, item.qty);
+    }
+
+    alert('✓ Order items added to cart!');
+  } catch (error) {
+    alert('Error repeating order: ' + error.message);
+  }
+}
+
+// Load orders on page load
+document.addEventListener('DOMContentLoaded', loadOrders);
+</script>
+
+</body>
+</html>

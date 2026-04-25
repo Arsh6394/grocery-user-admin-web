@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login - FreshMart</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2d8c4e;
+  --green-dark: #1e6338;
+  --green-light: #e8f5ec;
+  --orange: #f97316;
+  --text: #1a1a1a;
+  --text-mid: #4a5568;
+  --border: #e8f0e4;
+  --white: #ffffff;
+  --off-white: #fafaf7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(135deg, #e8f5ec 0%, #f0faf3 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-login-container {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 480px;
+  padding: 48px;
+}
+
+.admin-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.admin-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+
+.admin-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.admin-subtitle {
+  font-size: 14px;
+  color: var(--text-mid);
+}
+
+.admin-badge {
+  display: inline-block;
+  background: var(--orange);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-top: 12px;
+  text-transform: uppercase;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.3s;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--green);
+  background: var(--green-light);
+}
+
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s;
+  margin-top: 24px;
+}
+
+.btn-login:hover {
+  background: var(--green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45, 140, 78, 0.3);
+}
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 8px;
+  display: none;
+  padding: 12px;
+  background: #fee2e2;
+  border-radius: 6px;
+  border-left: 4px solid #ef4444;
+}
+
+.error-message.show {
+  display: block;
+}
+
+.loading-spinner {
+  display: none;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--border);
+  border-top: 3px solid var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.security-info {
+  background: var(--green-light);
+  border-left: 4px solid var(--green);
+  padding: 14px;
+  border-radius: 6px;
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+.security-info strong {
+  color: var(--green);
+  display: block;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 480px) {
+  .admin-login-container {
+    margin: 16px;
+    padding: 32px 24px;
+  }
+
+  .admin-title {
+    font-size: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="admin-login-container">
+  <div class="admin-header">
+    <div class="admin-logo">👨‍💼 FreshMart</div>
+    <h1 class="admin-title">Admin Access</h1>
+    <p class="admin-subtitle">Secure Admin Dashboard</p>
+    <span class="admin-badge">🔐 Admin Only</span>
+  </div>
+
+  <form onsubmit="handleAdminLogin(event)">
+    <div class="form-group">
+      <label for="adminEmail">Admin Email</label>
+      <input type="email" id="adminEmail" placeholder="admin@freshmart.com" required>
+      <div class="error-message" id="emailError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="adminPassword">Password</label>
+      <input type="password" id="adminPassword" placeholder="••••••••" required>
+      <div class="error-message" id="passwordError"></div>
+    </div>
+
+    <button type="submit" class="btn-login">Login to Admin Panel</button>
+    
+    <div class="loading-spinner" id="loadingSpinner">
+      <div class="spinner"></div>
+      <p style="margin-top: 8px; font-size: 13px; color: var(--text-mid);">Verifying credentials...</p>
+    </div>
+
+    <div class="error-message" id="generalError"></div>
+  </form>
+
+  <div class="security-info">
+    <strong>🔒 Security Notice:</strong>
+    This is a restricted admin area. Only authorized administrators can access this dashboard. All activities are logged and monitored.
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-firestore.js"></script>
+<script src="js/firebase-config.js"></script>
+
+<script>
+// Hardcoded admin credentials (in production, use proper admin system)
+const ADMIN_EMAILS = [
+  'admin@freshmart.com',
+  'aafridi@freshmart.com',
+  'owner@freshmart.com'
+];
+
+// Check if already logged in
+document.addEventListener('DOMContentLoaded', () => {
+  const adminSession = localStorage.getItem('adminSession');
+  if (adminSession) {
+    window.location = 'admin-dashboard.html';
+  }
+});
+
+// Handle admin login
+async function handleAdminLogin(event) {
+  event.preventDefault();
+
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
+
+  // Clear errors
+  document.getElementById('emailError').textContent = '';
+  document.getElementById('passwordError').textContent = '';
+  document.getElementById('generalError').textContent = '';
+
+  // Validate
+  if (!email) {
+    document.getElementById('emailError').textContent = 'Email is required';
+    return;
+  }
+
+  if (!ADMIN_EMAILS.includes(email)) {
+    document.getElementById('emailError').classList.add('show');
+    document.getElementById('emailError').textContent = 'Not authorized as admin';
+    return;
+  }
+
+  if (!password) {
+    document.getElementById('passwordError').textContent = 'Password is required';
+    return;
+  }
+
+  // Show loading
+  document.getElementById('loadingSpinner').style.display = 'block';
+
+  try {
+    // Sign in with Firebase
+    const result = await auth.signInWithEmailAndPassword(email, password);
+    
+    // Verify admin status in Firestore
+    const adminDoc = await db.collection('admins').doc(result.user.uid).get();
+    
+    if (!adminDoc.exists) {
+      throw new Error('User is not an authorized admin');
+    }
+
+    // Create admin session
+    localStorage.setItem('adminSession', JSON.stringify({
+      uid: result.user.uid,
+      email: result.user.email,
+      loginTime: new Date().toISOString()
+    }));
+
+    // Log admin login
+    await db.collection('adminLogs').add({
+      adminId: result.user.uid,
+      email: email,
+      action: 'LOGIN',
+      timestamp: new Date(),
+      ipAddress: 'Browser session'
+    });
+
+    // Redirect to dashboard
+    setTimeout(() => {
+      window.location = 'admin-dashboard.html';
+    }, 500);
+
+  } catch (error) {
+    document.getElementById('loadingSpinner').style.display = 'none';
+    const errorEl = document.getElementById('generalError');
+    errorEl.classList.add('show');
+    
+    if (error.message.includes('auth/user-not-found')) {
+      errorEl.textContent = '❌ Admin account not found';
+    } else if (error.message.includes('auth/wrong-password')) {
+      errorEl.textContent = '❌ Incorrect password';
+    } else if (error.message.includes('not an authorized admin')) {
+      errorEl.textContent = '❌ User is not authorized as admin';
+    } else {
+      errorEl.textContent = '❌ ' + error.message;
+    }
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile - FreshMart</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2d8c4e;
+  --green-dark: #1e6338;
+  --green-light: #e8f5ec;
+  --orange: #f97316;
+  --text: #1a1a1a;
+  --text-mid: #4a5568;
+  --text-light: #9ca3af;
+  --border: #e8f0e4;
+  --white: #ffffff;
+  --off-white: #fafaf7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; background: var(--off-white); }
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.profile-header {
+  background: var(--white);
+  padding: 40px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  flex-shrink: 0;
+}
+
+.profile-info h1 {
+  font-size: 24px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.profile-info p {
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+}
+
+.profile-badge {
+  display: inline-block;
+  background: var(--orange);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.form-card {
+  background: var(--white);
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.form-card h2 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--green);
+  background: var(--green-light);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.btn-save {
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-save:hover {
+  background: var(--green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45, 140, 78, 0.3);
+}
+
+.btn-logout {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-logout:hover {
+  background: #dc2626;
+}
+
+.message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  display: none;
+}
+
+.message.success {
+  background: #dcfce7;
+  color: #166534;
+  display: block;
+}
+
+.message.error {
+  background: #fee2e2;
+  color: #991b1b;
+  display: block;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--green-light);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--green);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-mid);
+  margin-top: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="profile-avatar">👤</div>
+    <div class="profile-info">
+      <h1 id="userName">Loading...</h1>
+      <p id="userEmail">Loading...</p>
+      <span class="profile-badge">Member Since 2024</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value" id="totalOrders">0</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="totalSpent">₹0</div>
+      <div class="stat-label">Total Spent</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="memberDays">0</div>
+      <div class="stat-label">Days Member</div>
+    </div>
+  </div>
+
+  <!-- Edit Profile -->
+  <div class="form-card">
+    <h2>Edit Profile</h2>
+    <div class="message" id="profileMessage"></div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="fullName" placeholder="Enter your full name">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="your@email.com" readonly>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="phone" placeholder="+91 98765 43210">
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" id="city" placeholder="Your City">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Address</label>
+      <textarea id="address" placeholder="Enter your full address"></textarea>
+    </div>
+
+    <button class="btn-save" onclick="saveProfile()">Save Changes</button>
+  </div>
+
+  <!-- Security -->
+  <div class="form-card">
+    <h2>Account Security</h2>
+    <p style="color: var(--text-mid); font-size: 14px; margin-bottom: 16px;">
+      Last login: <span id="lastLogin">Never</span>
+    </p>
+    <button class="btn-logout" onclick="logoutUser()">Logout</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-firestore.js"></script>
+<script src="js/firebase-config.js"></script>
+
+<script>
+// Load profile data
+async function loadProfile() {
+  if (!currentUser) {
+    window.location.href = 'auth.html';
+    return;
+  }
+
+  try {
+    const userDoc = await db.collection('users').doc(currentUser.uid).get();
+    const userData = userDoc.data();
+
+    // Fill form
+    document.getElementById('fullName').value = userData.name || '';
+    document.getElementById('email').value = userData.email || '';
+    document.getElementById('phone').value = userData.phone || '';
+    document.getElementById('address').value = userData.address || '';
+
+    // Update profile header
+    document.getElementById('userName').textContent = userData.name || 'User';
+    document.getElementById('userEmail').textContent = userData.email;
+
+    // Load stats
+    const ordersSnap = await db.collection('orders').where('userId', '==', currentUser.uid).get();
+    const orders = ordersSnap.docs.map(d => d.data());
+    
+    document.getElementById('totalOrders').textContent = orders.length;
+    
+    const totalSpent = orders.reduce((sum, order) => sum + (order.total || 0), 0);
+    document.getElementById('totalSpent').textContent = '₹' + totalSpent.toFixed(0);
+
+    const createdAt = userData.createdAt ? new Date(userData.createdAt.toDate()) : new Date();
+    const daysDiff = Math.floor((new Date() - createdAt) / (1000 * 60 * 60 * 24));
+    document.getElementById('memberDays').textContent = daysDiff;
+
+    document.getElementById('lastLogin').textContent = new Date(currentUser.metadata.lastSignInTime).toLocaleDateString();
+
+  } catch (error) {
+    console.error('Error loading profile:', error);
+    showProfileMessage('Error loading profile', 'error');
+  }
+}
+
+// Save profile
+async function saveProfile() {
+  const name = document.getElementById('fullName').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const address = document.getElementById('address').value.trim();
+
+  if (!name) {
+    showProfileMessage('Name is required', 'error');
+    return;
+  }
+
+  try {
+    await updateUserProfile(name, phone, address);
+    showProfileMessage('Profile updated successfully!', 'success');
+    setTimeout(() => loadProfile(), 500);
+  } catch (error) {
+    showProfileMessage('Error updating profile', 'error');
+  }
+}
+
+// Show message
+function showProfileMessage(msg, type) {
+  const messageEl = document.getElementById('profileMessage');
+  messageEl.textContent = msg;
+  messageEl.className = 'message ' + type;
+  setTimeout(() => {
+    messageEl.classList.remove(type);
+  }, 3000);
+}
+
+// Load profile on page load
+document.addEventListener('DOMContentLoaded', loadProfile);
+</script>
+
+</body>
+</html>

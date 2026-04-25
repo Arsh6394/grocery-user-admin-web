@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FreshMart - India's Freshest Grocery Store with 30-min delivery">
+  <title>FreshMart — India's Freshest Grocery Store</title>
+
+  <!-- Google Fonts with display=swap for better performance -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+
+  <!-- CSS Stylesheets (Modular approach) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-icon">🛒</div>
+  <div class="loader-text">FreshMart</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Item added to cart!</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div>🌿 100% Fresh &amp; Organic Products | Free Delivery on orders above ₹499</div>
+  <div class="topbar-links">
+    <a onclick="showPage('tracking')">Track Order</a>
+    <a>Help</a>
+    <a>Login</a>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo" onclick="showPage('home')"><span class="logo-leaf">🛍️</span> FreshMart</div>
+  <div class="search-bar">
+    <select class="search-select">
+      <option>All</option>
+      <option>Vegetables</option>
+      <option>Fruits</option>
+      <option>Dairy</option>
+      <option>Grains</option>
+      <option>Organic</option>
+    </select>
+    <input class="search-input" placeholder="Find fresh products..." aria-label="Search products">
+    <button class="search-btn" aria-label="Search">🔎</button>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-icon-btn" title="Wishlist" aria-label="Wishlist">❤️</button>
+    <button class="nav-icon-btn" title="Account" aria-label="Account">👤</button>
+    <button class="nav-cart-btn" onclick="showPage('cart')" aria-label="View cart">
+      🛒 Cart <span id="cartBadge" style="background:var(--yellow);color:var(--text);border-radius:50px;padding:1px 8px;font-size:12px;">4</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ======== HOME PAGE ======== -->
+<div id="home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">🚀 30-Min Delivery in Lucknow</div>
+      <h1 class="hero-title">Fresh from the<br><em>Farm</em>, <span>Straight</span><br>to Your Door</h1>
+      <p class="hero-desc">Order 5000+ fresh groceries, organic produce & daily essentials. Same-day delivery guaranteed across Lucknow & nearby areas.</p>
+      <div class="hero-btns">
+        <button class="btn-green" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">🛍️ Shop Now</button>
+        <button class="btn-outline-green">View Offers →</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">50K+</span><span class="stat-label">Happy Customers</span></div>
+        <div class="stat"><span class="stat-num">5000+</span><span class="stat-label">Products</span></div>
+        <div class="stat"><span class="stat-num">30 Min</span><span class="stat-label">Avg Delivery</span></div>
+      </div>
+    </div>
+    <div class="hero-img-wrap">
+      <img class="hero-main-img" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=85" alt="Fresh Groceries">
+      <div class="hero-bubble b1">
+        <div class="bubble-icon">🥦</div>
+        <div class="bubble-text"><span class="bubble-val">100% Organic</span><span class="bubble-sub">Certified fresh</span></div>
+      </div>
+      <div class="hero-bubble b2">
+        <div class="bubble-icon">⭐</div>
+        <div class="bubble-text"><span class="bubble-val">4.9 Rating</span><span class="bubble-sub">50K+ reviews</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-inner">
+      <span class="m-item">🥕 Fresh Vegetables Daily <span class="m-dot">●</span></span>
+      <span class="m-item">🍎 Seasonal Fruits <span class="m-dot">●</span></span>
+      <span class="m-item">🥛 Farm-Fresh Dairy <span class="m-dot">●</span></span>
+      <span class="m-item">🌾 Organic Grains <span class="m-dot">●</span></span>
+      <span class="m-item">🚚 Free Delivery ₹499+ <span class="m-dot">●</span></span>
+      <span class="m-item">♻️ Zero Pesticide <span class="m-dot">●</span></span>
+      <span class="m-item">🥕 Fresh Vegetables Daily <span class="m-dot">●</span></span>
+      <span class="m-item">🍎 Seasonal Fruits <span class="m-dot">●</span></span>
+      <span class="m-item">🥛 Farm-Fresh Dairy <span class="m-dot">●</span></span>
+      <span class="m-item">🌾 Organic Grains <span class="m-dot">●</span></span>
+      <span class="m-item">🚚 Free Delivery ₹499+ <span class="m-dot">●</span></span>
+      <span class="m-item">♻️ Zero Pesticide <span class="m-dot">●</span></span>
+    </div>
+  </div>
+
+  <!-- Remaining content (Categories, Products, etc.) -->
+  <!-- [Keep all the existing content from previous index.html] -->
+  
+</div>
+
+<!-- ======== CART PAGE ======== -->
+<div id="cart" class="page">
+  <!-- [Keep existing cart content] -->
+</div>
+
+<!-- ======== CHECKOUT PAGE ======== -->
+<div id="checkout" class="page">
+  <!-- [Keep existing checkout content] -->
+</div>
+
+<!-- ======== TRACKING PAGE ======== -->
+<div id="tracking" class="page">
+  <!-- [Keep existing tracking content] -->
+</div>
+
+<!-- Scripts -->
+<script src="js/main.js"></script>
+<!-- <script src="js/script.js"></script> For backwards compatibility, if needed -->
+</body>
+</html>

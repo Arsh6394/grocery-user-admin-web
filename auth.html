@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login & Signup - FreshMart</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2d8c4e;
+  --green-dark: #1e6338;
+  --green-light: #e8f5ec;
+  --orange: #f97316;
+  --text: #1a1a1a;
+  --text-mid: #4a5568;
+  --border: #e8f0e4;
+  --white: #ffffff;
+  --red: #ef4444;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; background: linear-gradient(135deg, #e8f5ec 0%, #f0faf3 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+.auth-container {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.auth-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: var(--text-mid);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.3s;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--green);
+  background: var(--green-light);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+  background: var(--green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45, 140, 78, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+  color: var(--text-mid);
+  font-size: 13px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.divider span {
+  margin: 0 12px;
+  font-weight: 600;
+}
+
+.btn-social {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--border);
+  background: white;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.btn-social:hover {
+  border-color: var(--green);
+  background: var(--green-light);
+}
+
+.toggle-form {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-mid);
+}
+
+.toggle-form a {
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.toggle-form a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: var(--red);
+  font-size: 13px;
+  margin-top: 4px;
+  display: none;
+}
+
+.error.show {
+  display: block;
+}
+
+.loading {
+  display: none;
+  text-align: center;
+  color: var(--text-mid);
+  font-size: 13px;
+}
+
+.loading.show {
+  display: block;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-top: 2px solid var(--green);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.form-section {
+  display: none;
+}
+
+.form-section.active {
+  display: block;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+.forgot-password a {
+  font-size: 13px;
+  color: var(--green);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .auth-container {
+    margin: 16px;
+    padding: 24px;
+  }
+  
+  .auth-title {
+    font-size: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="auth-container">
+  <div class="auth-header">
+    <div class="auth-logo">🍃 FreshMart</div>
+    <h1 class="auth-title" id="formTitle">Welcome Back</h1>
+    <p class="auth-subtitle" id="formSubtitle">Login to your account</p>
+  </div>
+
+  <!-- Login Form -->
+  <div class="form-section active" id="loginForm">
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="loginEmail" placeholder="you@example.com">
+      <div class="error" id="loginEmailError"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••">
+      <div class="error" id="loginPasswordError"></div>
+    </div>
+
+    <div class="remember-me">
+      <input type="checkbox" id="rememberMe">
+      <label for="rememberMe" style="margin: 0; text-transform: none;">Remember me</label>
+    </div>
+
+    <div class="forgot-password">
+      <a onclick="showForgotPassword()">Forgot password?</a>
+    </div>
+
+    <button class="btn-primary" onclick="handleLogin()">Login</button>
+
+    <div class="divider"><span>or continue with</span></div>
+
+    <button class="btn-social" onclick="handleGoogleLogin()">
+      <span style="font-size: 18px;">🔴</span> Google
+    </button>
+
+    <div class="error show" id="loginError" style="text-align: center; margin-top: 16px;"></div>
+    <div class="loading" id="loginLoading"><span class="spinner"></span> Logging in...</div>
+
+    <div class="toggle-form">
+      Don't have an account? <a onclick="switchForm('signup')">Sign up</a>
+    </div>
+  </div>
+
+  <!-- Signup Form -->
+  <div class="form-section" id="signupForm">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="signupName" placeholder="John Doe">
+      <div class="error" id="signupNameError"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="signupEmail" placeholder="you@example.com">
+      <div class="error" id="signupEmailError"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="signupPassword" placeholder="••••••••">
+      <div class="error" id="signupPasswordError"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input type="password" id="signupConfirmPassword" placeholder="••••••••">
+      <div class="error" id="signupConfirmPasswordError"></div>
+    </div>
+
+    <button class="btn-primary" onclick="handleSignup()">Create Account</button>
+
+    <div class="divider"><span>or sign up with</span></div>
+
+    <button class="btn-social" onclick="handleGoogleSignup()">
+      <span style="font-size: 18px;">🔴</span> Google
+    </button>
+
+    <div class="error show" id="signupError" style="text-align: center; margin-top: 16px;"></div>
+    <div class="loading" id="signupLoading"><span class="spinner"></span> Creating account...</div>
+
+    <div class="toggle-form">
+      Already have an account? <a onclick="switchForm('login')">Login</a>
+    </div>
+  </div>
+
+  <!-- Forgot Password Form -->
+  <div class="form-section" id="forgotPasswordForm">
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="forgotEmail" placeholder="you@example.com">
+      <div class="error" id="forgotError"></div>
+    </div>
+
+    <button class="btn-primary" onclick="handleForgotPassword()">Send Reset Link</button>
+    <div class="error show" id="forgotMessage" style="text-align: center; margin-top: 16px; color: var(--green);"></div>
+
+    <div class="toggle-form">
+      <a onclick="switchForm('login')">← Back to login</a>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/8.6.0/firebase-firestore.js"></script>
+<script src="js/firebase-config.js"></script>
+
+<script>
+// Form switching
+function switchForm(formName) {
+  document.querySelectorAll('.form-section').forEach(f => f.classList.remove('active'));
+  document.getElementById(formName + 'Form').classList.add('active');
+  
+  const titles = {
+    login: { title: 'Welcome Back', subtitle: 'Login to your account' },
+    signup: { title: 'Create Account', subtitle: 'Join FreshMart today' },
+    forgotPassword: { title: 'Reset Password', subtitle: 'We\'ll send you a reset link' }
+  };
+  
+  document.getElementById('formTitle').textContent = titles[formName]?.title || '';
+  document.getElementById('formSubtitle').textContent = titles[formName]?.subtitle || '';
+}
+
+// Show forgot password
+function showForgotPassword() {
+  switchForm('forgotPassword');
+}
+
+// Validate email
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// Handle Login
+async function handleLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  
+  // Clear errors
+  document.getElementById('loginEmailError').textContent = '';
+  document.getElementById('loginPasswordError').textContent = '';
+  document.getElementById('loginError').textContent = '';
+  
+  let hasError = false;
+
+  if (!email) {
+    document.getElementById('loginEmailError').textContent = 'Email is required';
+    hasError = true;
+  } else if (!isValidEmail(email)) {
+    document.getElementById('loginEmailError').textContent = 'Invalid email format';
+    hasError = true;
+  }
+
+  if (!password) {
+    document.getElementById('loginPasswordError').textContent = 'Password is required';
+    hasError = true;
+  } else if (password.length < 6) {
+    document.getElementById('loginPasswordError').textContent = 'Password must be at least 6 characters';
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  document.getElementById('loginLoading').classList.add('show');
+  document.getElementById('loginError').classList.remove('show');
+
+  try {
+    await signInUser(email, password);
+    setTimeout(() => {
+      window.location.href = 'grocery.html';
+    }, 500);
+  } catch (error) {
+    document.getElementById('loginLoading').classList.remove('show');
+    document.getElementById('loginError').classList.add('show');
+    document.getElementById('loginError').textContent = error.message;
+  }
+}
+
+// Handle Signup
+async function handleSignup() {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const confirmPassword = document.getElementById('signupConfirmPassword').value;
+
+  // Clear errors
+  document.getElementById('signupNameError').textContent = '';
+  document.getElementById('signupEmailError').textContent = '';
+  document.getElementById('signupPasswordError').textContent = '';
+  document.getElementById('signupConfirmPasswordError').textContent = '';
+  document.getElementById('signupError').textContent = '';
+
+  let hasError = false;
+
+  if (!name) {
+    document.getElementById('signupNameError').textContent = 'Name is required';
+    hasError = true;
+  }
+
+  if (!email) {
+    document.getElementById('signupEmailError').textContent = 'Email is required';
+    hasError = true;
+  } else if (!isValidEmail(email)) {
+    document.getElementById('signupEmailError').textContent = 'Invalid email format';
+    hasError = true;
+  }
+
+  if (!password) {
+    document.getElementById('signupPasswordError').textContent = 'Password is required';
+    hasError = true;
+  } else if (password.length < 6) {
+    document.getElementById('signupPasswordError').textContent = 'Password must be at least 6 characters';
+    hasError = true;
+  }
+
+  if (password !== confirmPassword) {
+    document.getElementById('signupConfirmPasswordError').textContent = 'Passwords do not match';
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  document.getElementById('signupLoading').classList.add('show');
+  document.getElementById('signupError').classList.remove('show');
+
+  try {
+    await signUpUser(email, password, name);
+    setTimeout(() => {
+      window.location.href = 'grocery.html';
+    }, 500);
+  } catch (error) {
+    document.getElementById('signupLoading').classList.remove('show');
+    document.getElementById('signupError').classList.add('show');
+    document.getElementById('signupError').textContent = error.message;
+  }
+}
+
+// Handle Google Login
+async function handleGoogleLogin() {
+  try {
+    await signInWithGoogle();
+    setTimeout(() => {
+      window.location.href = 'grocery.html';
+    }, 500);
+  } catch (error) {
+    document.getElementById('loginError').classList.add('show');
+    document.getElementById('loginError').textContent = error.message;
+  }
+}
+
+// Handle Google Signup
+async function handleGoogleSignup() {
+  try {
+    await signInWithGoogle();
+    setTimeout(() => {
+      window.location.href = 'grocery.html';
+    }, 500);
+  } catch (error) {
+    document.getElementById('signupError').classList.add('show');
+    document.getElementById('signupError').textContent = error.message;
+  }
+}
+
+// Handle Forgot Password
+async function handleForgotPassword() {
+  const email = document.getElementById('forgotEmail').value.trim();
+  document.getElementById('forgotError').textContent = '';
+
+  if (!email) {
+    document.getElementById('forgotError').textContent = 'Email is required';
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    document.getElementById('forgotError').textContent = 'Invalid email format';
+    return;
+  }
+
+  try {
+    await auth.sendPasswordResetEmail(email);
+    document.getElementById('forgotMessage').textContent = '✓ Reset link sent! Check your email.';
+    document.getElementById('forgotMessage').classList.add('show');
+    setTimeout(() => switchForm('login'), 2000);
+  } catch (error) {
+    document.getElementById('forgotError').textContent = error.message;
+  }
+}
+
+// Check if already logged in
+document.addEventListener('DOMContentLoaded', () => {
+  if (currentUser) {
+    window.location.href = 'grocery.html';
+  }
+});
+</script>
+
+</body>
+</html>

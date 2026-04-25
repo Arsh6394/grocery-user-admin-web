@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreshMart — India's Freshest Grocery Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-icon">🛒</div>
+  <div class="loader-text">FreshMart</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Item added to cart!</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div>🌿 100% Fresh &amp; Organic Products | Free Delivery on orders above ₹499</div>
+  <div class="topbar-links">
+    <a onclick="showPage('tracking')">Track Order</a>
+    <a>Help</a>
+    <a>Login</a>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo" onclick="showPage('home')"><span class="logo-leaf">🛍️</span> FreshMart</div>
+  <div class="search-bar">
+    <select class="search-select">
+      <option>All</option><option>Vegetables</option><option>Fruits</option><option>Dairy</option><option>Grains</option><option>Organic</option>
+    </select>
+    <input class="search-input" placeholder="Find fresh products...">
+    <button class="search-btn">🔎</button>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-icon-btn" title="Wishlist">❤️</button>
+    <button class="nav-icon-btn" title="Account">👤</button>
+    <button class="nav-cart-btn" onclick="showPage('cart')">
+      🛒 Cart <span id="cartBadge" style="background:var(--yellow);color:var(--text);border-radius:50px;padding:1px 8px;font-size:12px;">4</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ======== HOME PAGE ======== -->
+<div id="home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">🚀 30-Min Delivery in Lucknow</div>
+      <h1 class="hero-title">Fresh from the<br><em>Farm</em>, <span>Straight</span><br>to Your Door</h1>
+      <p class="hero-desc">Order 5000+ fresh groceries, organic produce & daily essentials. Same-day delivery guaranteed across Lucknow & nearby areas.</p>
+      <div class="hero-btns">
+        <button class="btn-green" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">🛍️ Shop Now</button>
+        <button class="btn-outline-green">View Offers →</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">50K+</span><span class="stat-label">Happy Customers</span></div>
+        <div class="stat"><span class="stat-num">5000+</span><span class="stat-label">Products</span></div>
+        <div class="stat"><span class="stat-num">30 Min</span><span class="stat-label">Avg Delivery</span></div>
+      </div>
+    </div>
+    <div class="hero-img-wrap">
+      <img class="hero-main-img" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=85" alt="Fresh Groceries">
+      <div class="hero-bubble b1">
+        <div class="bubble-icon">🥦</div>
+        <div class="bubble-text"><span class="bubble-val">100% Organic</span><span class="bubble-sub">Certified fresh</span></div>
+      </div>
+      <div class="hero-bubble b2">
+        <div class="bubble-icon">⭐</div>
+        <div class="bubble-text"><span class="bubble-val">4.9 Rating</span><span class="bubble-sub">50K+ reviews</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-inner">
+      <span class="m-item">🥕 Fresh Vegetables Daily <span class="m-dot">●</span></span>
+      <span class="m-item">🍎 Seasonal Fruits <span class="m-dot">●</span></span>
+      <span class="m-item">🥛 Farm-Fresh Dairy <span class="m-dot">●</span></span>
+      <span class="m-item">🌾 Organic Grains <span class="m-dot">●</span></span>
+      <span class="m-item">🚚 Free Delivery ₹499+ <span class="m-dot">●</span></span>
+      <span class="m-item">♻️ Zero Pesticide <span class="m-dot">●</span></span>
+      <span class="m-item">🥕 Fresh Vegetables Daily <span class="m-dot">●</span></span>
+      <span class="m-item">🍎 Seasonal Fruits <span class="m-dot">●</span></span>
+      <span class="m-item">🥛 Farm-Fresh Dairy <span class="m-dot">●</span></span>
+      <span class="m-item">🌾 Organic Grains <span class="m-dot">●</span></span>
+      <span class="m-item">🚚 Free Delivery ₹499+ <span class="m-dot">●</span></span>
+      <span class="m-item">♻️ Zero Pesticide <span class="m-dot">●</span></span>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-left">
+        <div class="tag">Browse</div>
+        <h2>Shop by <em>Category</em></h2>
+      </div>
+      <a class="see-all">See All →</a>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&q=80" alt="Vegetables">
+        <div class="cat-card-name">Vegetables</div>
+        <div class="cat-card-count">120+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=200&q=80" alt="Fruits">
+        <div class="cat-card-name">Fresh Fruits</div>
+        <div class="cat-card-count">85+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&q=80" alt="Dairy">
+        <div class="cat-card-name">Dairy & Eggs</div>
+        <div class="cat-card-count">60+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&q=80" alt="Bakery">
+        <div class="cat-card-name">Bakery</div>
+        <div class="cat-card-count">45+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&q=80" alt="Grains">
+        <div class="cat-card-name">Rice & Grains</div>
+        <div class="cat-card-count">75+ items</div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200&q=80" alt="Spices">
+        <div class="cat-card-name">Spices & Masala</div>
+        <div class="cat-card-count">90+ items</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="section" id="products" style="background:#fff;padding-top:60px;">
+    <div class="section-head">
+      <div class="section-left">
+        <div class="tag">Trending</div>
+        <h2>Fresh <em>Picks Today</em></h2>
+      </div>
+      <a class="see-all">See All →</a>
+    </div>
+    <div class="cat-pills">
+      <div class="cat-pill active"><span class="cat-pill-icon">🌟</span>Best Sellers</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🥬</span>Vegetables</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🍎</span>Fruits</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🥛</span>Dairy</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🌾</span>Grains</div>
+      <div class="cat-pill"><span class="cat-pill-icon">🧄</span>Spices</div>
+    </div>
+    <div class="prod-grid">
+      <!-- P1 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1627735341492-bc9c96fa6897?w=400&q=80" alt="Tomatoes">
+          <span class="prod-badge badge-green">Organic</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Vegetables</div>
+          <div class="prod-name">Red Tomatoes</div>
+          <div class="prod-weight">500g Pack</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹35</span><span class="prod-price-old">₹50</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P2 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1550828520-4cb496926fc9?w=400&q=80" alt="Spinach">
+          <span class="prod-badge badge-green">Farm Fresh</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Leafy Greens</div>
+          <div class="prod-name">Fresh Spinach</div>
+          <div class="prod-weight">250g Bundle</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹28</span><span class="prod-price-old">₹40</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P3 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&q=80" alt="Mangoes">
+          <span class="prod-badge badge-orange">Seasonal</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Fruits</div>
+          <div class="prod-name">Alphonso Mangoes</div>
+          <div class="prod-weight">1kg Box</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹180</span><span class="prod-price-old">₹250</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P4 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&q=80" alt="Milk">
+          <span class="prod-badge badge-yellow">Daily Fresh</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Dairy</div>
+          <div class="prod-name">Full Cream Milk</div>
+          <div class="prod-weight">1 Litre Pouch</div>
+          <div class="prod-stars">★★★★☆</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹62</span><span class="prod-price-old">₹70</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P5 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1596591868231-05e808fd131d?w=400&q=80" alt="Bananas">
+          <span class="prod-badge badge-green">Best Value</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Fruits</div>
+          <div class="prod-name">Ripe Bananas</div>
+          <div class="prod-weight">Dozen (12 pcs)</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹48</span><span class="prod-price-old">₹60</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P6 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&q=80" alt="Potatoes">
+          <span class="prod-badge badge-orange">Sale 30%</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Vegetables</div>
+          <div class="prod-name">Fresh Potatoes</div>
+          <div class="prod-weight">2kg Bag</div>
+          <div class="prod-stars">★★★★☆</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹55</span><span class="prod-price-old">₹80</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P7 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1582819509237-d5b75f20ff7a?w=400&q=80" alt="Eggs">
+          <span class="prod-badge badge-yellow">Farm Fresh</span>
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Eggs</div>
+          <div class="prod-name">Country Eggs</div>
+          <div class="prod-weight">6 Piece Tray</div>
+          <div class="prod-stars">★★★★★</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹72</span><span class="prod-price-old">₹90</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+      <!-- P8 -->
+      <div class="prod-card">
+        <div class="prod-img-wrap">
+          <img src="https://images.unsplash.com/photo-1465014925804-7b9ede58d0d7?w=400&q=80" alt="Onions">
+          <button class="wish-btn">♡</button>
+        </div>
+        <div class="prod-info">
+          <div class="prod-category">Vegetables</div>
+          <div class="prod-name">Red Onions</div>
+          <div class="prod-weight">1kg Bag</div>
+          <div class="prod-stars">★★★★☆</div>
+          <div class="prod-bottom">
+            <div class="prod-price-wrap"><span class="prod-price">₹40</span><span class="prod-price-old">₹55</span></div>
+            <button class="add-btn" onclick="addToCart()">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER STRIP -->
+  <div class="banner-strip">
+    <div class="banner-grid">
+      <div class="banner-card">
+        <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=900&q=80" alt="Fruits Sale">
+        <div class="banner-content">
+          <div class="banner-tag">🍎 Weekend Special</div>
+          <div class="banner-title">Fresh Fruits<br>Up to 50% Off</div>
+          <div class="banner-sub">Only for today — limited stock</div>
+          <button class="banner-btn">Shop Fruits →</button>
+        </div>
+      </div>
+      <div class="banner-card">
+        <img src="https://images.unsplash.com/photo-1506617420156-8e4536971650?w=600&q=80" alt="Organic">
+        <div class="banner-content">
+          <div class="banner-tag">🌿 Certified Organic</div>
+          <div class="banner-title">100% Organic<br>Vegetables</div>
+          <div class="banner-sub">Zero pesticides, pure taste</div>
+          <button class="banner-btn">Explore →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🚀</div>
+      <div class="feature-title">30-Min Delivery</div>
+      <div class="feature-desc">Ultra-fast delivery right to your doorstep, even on holidays.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌿</div>
+      <div class="feature-title">100% Organic</div>
+      <div class="feature-desc">Certified fresh produce sourced directly from local farms.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">💰</div>
+      <div class="feature-title">Best Prices</div>
+      <div class="feature-desc">Farm-direct pricing means you always get the best deals.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔄</div>
+      <div class="feature-title">Easy Returns</div>
+      <div class="feature-desc">Not fresh? Get a full refund or replacement — no questions asked.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">🥬 FreshMart</div>
+        <p class="footer-desc">India's freshest grocery delivery service. Farm-to-table quality, delivered in 30 minutes across Lucknow and surrounding areas.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Shop</div>
+        <ul class="footer-links">
+          <li><a>Vegetables</a></li><li><a>Fruits</a></li><li><a>Dairy & Eggs</a></li><li><a>Grains & Pulses</a></li><li><a>Spices</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Support</div>
+        <ul class="footer-links">
+          <li><a onclick="showPage('tracking')">Track Order</a></li><li><a>Returns</a></li><li><a>FAQ</a></li><li><a>Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a>About Us</a></li><li><a>Careers</a></li><li><a>Blog</a></li><li><a>Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 FreshMart. All rights reserved. Made with 💚 in Lucknow</span>
+      <span>🔒 Secure Payments · 🚚 Fast Delivery</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ======== CART PAGE ======== -->
+<div id="cart" class="page">
+  <div class="page-wrap">
+    <h1 class="page-title">🛒 Your Cart</h1>
+    <p class="page-sub">4 items · Delivery by Today, 6:00 PM</p>
+    <div class="cart-layout">
+      <div class="cart-list">
+        <div class="cart-item">
+          <img class="cart-item-img" src="https://images.unsplash.com/photo-1627735341492-bc9c96fa6897?w=200&q=80" alt="Tomatoes">
+          <div>
+            <div class="cart-item-category">Vegetables</div>
+            <div class="cart-item-name">Red Tomatoes</div>
+            <div class="cart-item-wt">500g Pack</div>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">2</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+            <button class="remove-btn">🗑 Remove</button>
+          </div>
+          <div style="text-align:right;">
+            <div class="item-old-price">₹100</div>
+            <div class="item-price">₹70</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <img class="cart-item-img" src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=200&q=80" alt="Mangoes">
+          <div>
+            <div class="cart-item-category">Fruits</div>
+            <div class="cart-item-name">Alphonso Mangoes</div>
+            <div class="cart-item-wt">1kg Box</div>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+            <button class="remove-btn">🗑 Remove</button>
+          </div>
+          <div style="text-align:right;">
+            <div class="item-old-price">₹250</div>
+            <div class="item-price">₹180</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <img class="cart-item-img" src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=200&q=80" alt="Milk">
+          <div>
+            <div class="cart-item-category">Dairy</div>
+            <div class="cart-item-name">Full Cream Milk</div>
+            <div class="cart-item-wt">1 Litre Pouch</div>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">3</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+            <button class="remove-btn">🗑 Remove</button>
+          </div>
+          <div style="text-align:right;">
+            <div class="item-old-price">₹210</div>
+            <div class="item-price">₹186</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <img class="cart-item-img" src="https://images.unsplash.com/photo-1582819509237-d5b75f20ff7a?w=200&q=80" alt="Eggs">
+          <div>
+            <div class="cart-item-category">Eggs</div>
+            <div class="cart-item-name">Country Eggs</div>
+            <div class="cart-item-wt">6 Piece Tray</div>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+            <button class="remove-btn">🗑 Remove</button>
+          </div>
+          <div style="text-align:right;">
+            <div class="item-old-price">₹90</div>
+            <div class="item-price">₹72</div>
+          </div>
+        </div>
+        <button class="btn-outline-green" onclick="showPage('home')" style="margin-top:8px;">← Continue Shopping</button>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="summary-box">
+        <div class="summary-title">Bill Details</div>
+        <div class="summary-row"><span>MRP Total</span><span>₹650</span></div>
+        <div class="summary-row"><span>Product Discount</span><span style="color:var(--green)">−₹142</span></div>
+        <div class="summary-row"><span>Delivery Charges</span><span style="color:var(--green)">FREE 🎉</span></div>
+        <div class="summary-row"><span>Handling Charges</span><span>₹5</span></div>
+        <div class="summary-row total"><span>Total Amount</span><span>₹513</span></div>
+        <div class="savings-badge">🎉 You're saving ₹142 on this order!</div>
+        <div class="promo-row">
+          <input class="promo-in" placeholder="Enter promo code" value="FRESH20">
+          <button class="promo-apply">Apply</button>
+        </div>
+        <button class="checkout-btn" onclick="showPage('checkout')">Proceed to Checkout 🛍️</button>
+        <div class="secure-note">🔒 100% Secure · SSL Encrypted</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== CHECKOUT PAGE ======== -->
+<div id="checkout" class="page">
+  <div class="page-wrap">
+    <h1 class="page-title">📦 Checkout</h1>
+    <p class="page-sub">Almost there! Complete your delivery details.</p>
+    <div class="checkout-layout">
+      <div>
+        <!-- Delivery Info -->
+        <div class="form-block">
+          <div class="form-block-title">📍 Delivery Address</div>
+          <div class="form-grid">
+            <div class="fg"><label class="form-label">First Name</label><input class="form-input" placeholder="Rahul"></div>
+            <div class="fg"><label class="form-label">Last Name</label><input class="form-input" placeholder="Verma"></div>
+            <div class="fg"><label class="form-label">Mobile Number</label><input class="form-input" placeholder="+91 98765 43210"></div>
+            <div class="fg"><label class="form-label">Email</label><input class="form-input" placeholder="rahul@gmail.com" type="email"></div>
+            <div class="fg full"><label class="form-label">Full Address</label><input class="form-input" placeholder="House No, Street, Colony"></div>
+            <div class="fg"><label class="form-label">City</label><input class="form-input" placeholder="Lucknow" value="Lucknow"></div>
+            <div class="fg"><label class="form-label">State</label>
+              <select class="form-select"><option>Uttar Pradesh</option><option>Maharashtra</option><option>Delhi</option></select>
+            </div>
+            <div class="fg"><label class="form-label">PIN Code</label><input class="form-input" placeholder="226001"></div>
+            <div class="fg"><label class="form-label">Delivery Slot</label>
+              <select class="form-select"><option>Today 2PM–4PM</option><option>Today 4PM–6PM</option><option>Tomorrow 10AM–12PM</option></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="form-block">
+          <div class="form-block-title">💳 Payment Method</div>
+          <div class="pay-options">
+            <div class="pay-opt sel" onclick="selPay(this)">
+              <input type="radio" name="pay" checked>
+              <span class="pay-icon">💳</span>
+              <div><div class="pay-label">Credit / Debit Card</div><div class="pay-sub">All major cards accepted</div></div>
+            </div>
+            <div class="pay-opt" onclick="selPay(this)">
+              <input type="radio" name="pay">
+              <span class="pay-icon">📱</span>
+              <div><div class="pay-label">UPI Payment</div><div class="pay-sub">GPay, PhonePe, Paytm, BHIM</div></div>
+            </div>
+            <div class="pay-opt" onclick="selPay(this)">
+              <input type="radio" name="pay">
+              <span class="pay-icon">🏦</span>
+              <div><div class="pay-label">Net Banking</div><div class="pay-sub">All major Indian banks</div></div>
+            </div>
+            <div class="pay-opt" onclick="selPay(this)">
+              <input type="radio" name="pay">
+              <span class="pay-icon">💵</span>
+              <div><div class="pay-label">Cash on Delivery</div><div class="pay-sub">Pay when your order arrives</div></div>
+            </div>
+          </div>
+          <div class="form-grid" style="margin-top:18px;">
+            <div class="fg full"><label class="form-label">Card Number</label><input class="form-input" placeholder="4532 •••• •••• 8765"></div>
+            <div class="fg"><label class="form-label">Expiry</label><input class="form-input" placeholder="MM / YY"></div>
+            <div class="fg"><label class="form-label">CVV</label><input class="form-input" placeholder="•••" type="password"></div>
+          </div>
+        </div>
+        <button class="place-order-btn" onclick="placeOrder()">🎉 Place Order — ₹513</button>
+      </div>
+
+      <!-- Checkout Summary -->
+      <div class="checkout-summary">
+        <div class="summary-title">Order Summary</div>
+        <div class="co-items">
+          <div class="co-item">
+            <img src="https://images.unsplash.com/photo-1627735341492-bc9c96fa6897?w=100&q=80" alt="">
+            <div><div class="co-item-name">Red Tomatoes</div><div class="co-item-qty">×2 · 500g</div></div>
+            <div class="co-item-price">₹70</div>
+          </div>
+          <div class="co-item">
+            <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=100&q=80" alt="">
+            <div><div class="co-item-name">Alphonso Mangoes</div><div class="co-item-qty">×1 · 1kg</div></div>
+            <div class="co-item-price">₹180</div>
+          </div>
+          <div class="co-item">
+            <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=100&q=80" alt="">
+            <div><div class="co-item-name">Full Cream Milk</div><div class="co-item-qty">×3 · 1L</div></div>
+            <div class="co-item-price">₹186</div>
+          </div>
+          <div class="co-item">
+            <img src="https://images.unsplash.com/photo-1582819509237-d5b75f20ff7a?w=100&q=80" alt="">
+            <div><div class="co-item-name">Country Eggs</div><div class="co-item-qty">×1 · 6pc</div></div>
+            <div class="co-item-price">₹72</div>
+          </div>
+        </div>
+        <div class="summary-row"><span>Subtotal</span><span>₹508</span></div>
+        <div class="summary-row"><span>Delivery</span><span style="color:var(--green)">FREE</span></div>
+        <div class="summary-row"><span>Handling</span><span>₹5</span></div>
+        <div class="summary-row total"><span>Total</span><span>₹513</span></div>
+        <div style="margin-top:16px;background:var(--green-light);border-radius:12px;padding:14px;font-size:13px;">
+          <div style="font-weight:800;color:var(--green);margin-bottom:4px;">🚚 Delivery Slot</div>
+          <div style="color:var(--text-mid);">Today, 4:00 PM – 6:00 PM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== TRACKING PAGE ======== -->
+<div id="tracking" class="page">
+  <div class="page-wrap">
+    <h1 class="page-title">📦 Track Your Order</h1>
+    <p class="page-sub">Enter your order ID to get live delivery updates</p>
+
+    <div class="track-search-box">
+      <h3>🔍 Order Tracker</h3>
+      <p>Enter your FreshMart Order ID or phone number</p>
+      <div class="track-form">
+        <input class="track-in" placeholder="e.g. FM-2025-78234" value="FM-2025-78234">
+        <button class="track-btn" onclick="showTrack()">Track →</button>
+      </div>
+    </div>
+
+    <div id="trackResult">
+      <div class="order-info-card">
+        <div class="order-meta">
+          <div class="meta-item">
+            <div class="meta-label">Order ID</div>
+            <div class="meta-val green">FM-2025-78234</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Order Date</div>
+            <div class="meta-val">22 Apr, 2025</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Expected Delivery</div>
+            <div class="meta-val">Today, 4–6 PM</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="meta-val green">🛵 Out for Delivery</div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-wrap">
+          <div class="timeline-track">
+            <div class="tl-progress"></div>
+            <div class="tl-step">
+              <div class="tl-dot done">✅</div>
+              <div class="tl-label done">Order Placed</div>
+              <div class="tl-date">9:30 AM</div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot done">✅</div>
+              <div class="tl-label done">Confirmed</div>
+              <div class="tl-date">9:32 AM</div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot done">✅</div>
+              <div class="tl-label done">Packed</div>
+              <div class="tl-date">10:15 AM</div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot active">🛵</div>
+              <div class="tl-label active">Out for Delivery</div>
+              <div class="tl-date">Now</div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot" style="opacity:0.35">🏠</div>
+              <div class="tl-label">Delivered</div>
+              <div class="tl-date">~4–6 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivery Detail -->
+      <div class="delivery-detail-card">
+        <div class="delivery-img-side">
+          <img src="https://images.unsplash.com/photo-1587355760421-b9de3226a046?w=600&q=80" alt="Delivery">
+        </div>
+        <div class="delivery-info-side">
+          <div class="delivery-heading">Delivery Info</div>
+          <div class="detail-row">
+            <div class="detail-ico">🛵</div>
+            <div class="detail-txt"><strong>Delivery Partner:</strong> Raju Kumar<br>📞 +91 98001 12345</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-ico">📍</div>
+            <div class="detail-txt"><strong>Current Location:</strong> Hazratganj, Lucknow<br>~2.4 km from your address</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-ico">🏠</div>
+            <div class="detail-txt"><strong>Delivering to:</strong> House 12, Green Park<br>Lucknow – 226001</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-ico">⏱️</div>
+            <div class="detail-txt"><strong>ETA:</strong> Today 4:00 PM – 6:00 PM<br>22 April 2025</div>
+          </div>
+          <div style="background:var(--green-light);border-radius:12px;padding:12px;font-size:13px;color:var(--green);font-weight:800;">
+            🎉 Your fresh groceries are almost there!
+          </div>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="ordered-items-card">
+        <div class="oi-title">Items in This Order</div>
+        <div class="oi-list">
+          <div class="oi-item">
+            <img class="oi-img" src="https://images.unsplash.com/photo-1627735341492-bc9c96fa6897?w=150&q=80" alt="Tomatoes">
+            <div><div class="oi-cat">Vegetables</div><div class="oi-name">Red Tomatoes</div><div class="oi-wt">500g × 2</div></div>
+            <div class="oi-price">₹70</div>
+          </div>
+          <div class="oi-item">
+            <img class="oi-img" src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=150&q=80" alt="Mangoes">
+            <div><div class="oi-cat">Fruits</div><div class="oi-name">Alphonso Mangoes</div><div class="oi-wt">1kg × 1</div></div>
+            <div class="oi-price">₹180</div>
+          </div>
+          <div class="oi-item">
+            <img class="oi-img" src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=150&q=80" alt="Milk">
+            <div><div class="oi-cat">Dairy</div><div class="oi-name">Full Cream Milk</div><div class="oi-wt">1L × 3</div></div>
+            <div class="oi-price">₹186</div>
+          </div>
+          <div class="oi-item">
+            <img class="oi-img" src="https://images.unsplash.com/photo-1582819509237-d5b75f20ff7a?w=150&q=80" alt="Eggs">
+            <div><div class="oi-cat">Eggs</div><div class="oi-name">Country Eggs</div><div class="oi-wt">6pc × 1</div></div>
+            <div class="oi-price">₹72</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:15px;color:var(--text-mid);">Total Paid</span>
+          <span style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--green);">₹513</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
